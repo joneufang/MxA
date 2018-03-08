@@ -1,0 +1,11 @@
+{
+  "name": "MendixAnalytics",
+  "version": "0.1.0",
+  "main": "test.js",
+  "dependencies": {
+    "@types/when": "^2.4.28",
+    "mendixmodelsdk": "~4.8.0",
+    "mendixplatformsdk": "~4.0.0",
+    "when": "^2.4.28"
+  }
+}
