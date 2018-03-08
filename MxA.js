@@ -11,6 +11,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var mendixplatformsdk_1 = require("mendixplatformsdk");
+var when = require("when");
+var fs = require("fs-extra");
 var constants;
 (function (constants) {
     var propertys;
@@ -38,13 +40,25 @@ var MxAProject = /** @class */ (function () {
         this.project = new mendixplatformsdk_1.Project(this.client, this.id, "");
     }
     MxAProject.prototype.getDocsFromProject = function (propertys, filterTypes, filterValues, sortcolumn, resultType) {
+        var _this = this;
+        var result = "";
         this.project.createWorkingCopy().then(function (workingCopy) {
             return workingCopy.model().allDocuments();
         })
             .then(function (documents) {
             documents.forEach(function (doc) {
-                console.log("ID: " + doc.id + "\tName: " + doc.qualifiedName + "\tType: " + doc.structureTypeName + "\t\n");
+                result += ("ID: " + doc.id + "\tName: " + doc.qualifiedName + "\tType: " + doc.structureTypeName + "\t\n");
             });
+            return loadAllDocumentsAsPromise(documents);
+        })
+            .done(function () {
+            console.log("Im Done!!!");
+            if (resultType == MxAProject.TEXTFILE) {
+                fs.outputFile(_this.file, result);
+            }
+            else {
+                console.log("Wrong ResultType");
+            }
         });
     };
     MxAProject.TEXTFILE = "TEXTFILE";
@@ -80,3 +94,6 @@ var MxAToTextFile = /** @class */ (function (_super) {
     return MxAToTextFile;
 }(MxAProject));
 exports.MxAToTextFile = MxAToTextFile;
+function loadAllDocumentsAsPromise(documents) {
+    return when.all(documents.map(function (doc) { return mendixplatformsdk_1.loadAsPromise(doc); }));
+}

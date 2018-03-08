@@ -1,6 +1,8 @@
 import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwidgets, projects} from "mendixmodelsdk";
 import {MendixSdkClient, Project, OnlineWorkingCopy, loadAsPromise} from "mendixplatformsdk";
 import when = require("when");
+import fs = require("fs-extra");
+
 
 export namespace constants {
     export namespace propertys {
@@ -27,9 +29,12 @@ class MxAProject {
     protected name : string;
     protected key : string;
     protected id : string;
+    protected file : string;
 
     protected client : MendixSdkClient;
     protected project : Project;
+
+    
 
     protected constructor(username : string, apikey : string, appid: string) {
         this.name = username;
@@ -41,6 +46,8 @@ class MxAProject {
     }
 
     protected getDocsFromProject(propertys : string[], filterTypes : string[], filterValues : string[], sortcolumn : number[], resultType : string) {
+        var result : string = "";
+        
         this.project.createWorkingCopy().then((workingCopy) => {
             return workingCopy.model().allDocuments();
         })
@@ -48,10 +55,28 @@ class MxAProject {
             documents.forEach((doc) => {
 
                 
-                console.log("ID: " + doc.id + "\tName: " + doc.qualifiedName + "\tType: " + doc.structureTypeName + "\t\n");
+                result += ("ID: " + doc.id + "\tName: " + doc.qualifiedName + "\tType: " + doc.structureTypeName + "\t\n");
             });
+            return loadAllDocumentsAsPromise(documents);
+        })
+        .done(() => {
+        
+            console.log("Im Done!!!");
+            if(resultType == MxAProject.TEXTFILE)
+            {
+                fs.outputFile(this.file, result);
+            }
+            else
+            {
+                console.log("Wrong ResultType");
+            }
+            
+
         });
+
     }
+
+    
 }    
 
 export class MxAToHtmlTable extends MxAProject {
@@ -75,8 +100,6 @@ export class MxAToHtmlTable extends MxAProject {
 
 export class MxAToTextFile extends MxAProject {
 
-    private file;
-
     public constructor(username : string, apikey : string, appid : string, textfile : string) {
         super(username, apikey, appid);
         this.file = textfile;
@@ -86,4 +109,8 @@ export class MxAToTextFile extends MxAProject {
         super.getDocsFromProject(propertys, filterTypes, filterValues, sortcolumn, MxAProject.TEXTFILE);
     }
 
+}
+
+function loadAllDocumentsAsPromise(documents: projects.IDocument[]): when.Promise<projects.Document[]> {
+    return when.all<projects.Document[]>(documents.map( doc => loadAsPromise(doc)));
 }
