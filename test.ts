@@ -7,5 +7,4 @@ let projectName = `7-2-0-ATSTest`;
 let projectId = `01bfc705-81e4-4ffa-8bc9-0c43e7f2b5ba`;
 
 let project = new mendixanalytics.MxAToTextFile(username, apikey, projectId, "./Test.txt");
-mendixanalytics.constants.propertys.ID
 project.getDocumentsFromProject([mendixanalytics.constants.propertys.ID], [mendixanalytics.constants.filter.ID], ["Test"], [1]); 
