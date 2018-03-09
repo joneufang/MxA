@@ -24,23 +24,20 @@ var MxAProject = /** @class */ (function () {
     }
     MxAProject.prototype.getDocsFromProject = function (propertys, filterTypes, filterValues, sortcolumn, resultType) {
         var _this = this;
-        var result = "";
-        var erg = new MxAO.MxAObjectList();
+        var result = new MxAO.MxAObjectList();
         this.project.createWorkingCopy().then(function (workingCopy) {
             return workingCopy.model().allDocuments();
         })
             .then(function (documents) {
             documents.forEach(function (doc) {
-                erg.addObject([new MxAO.MxAProperty("ID", doc.id), new MxAO.MxAProperty("Name", doc.qualifiedName), new MxAO.MxAProperty("Type", doc.structureTypeName)]);
-                //result += ("ID: " + doc.id + "\tName: " + doc.qualifiedName + "\tType: " + doc.structureTypeName + "\t\n");
+                result.addObject([new MxAO.MxAProperty("ID", doc.id), new MxAO.MxAProperty("Name", doc.qualifiedName), new MxAO.MxAProperty("Type", doc.structureTypeName)]);
             });
             return loadAllDocumentsAsPromise(documents);
         })
             .done(function () {
             console.log("Im Done!!!");
             if (resultType == MxAProject.TEXTFILE) {
-                fs.outputFile(_this.file, erg.toString());
-                //fs.outputFile(this.file, result);
+                fs.outputFile(_this.file, result.toString());
             }
             else {
                 console.log("Wrong ResultType");
@@ -49,6 +46,8 @@ var MxAProject = /** @class */ (function () {
     };
     MxAProject.TEXTFILE = "TEXTFILE";
     MxAProject.HTMLTABLE = "HTMLTABLE";
+    MxAProject.XML = "XML";
+    MxAProject.JSON = "JSON";
     return MxAProject;
 }());
 var MxAToHtmlTable = /** @class */ (function (_super) {
