@@ -1,24 +1,10 @@
-import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwidgets, projects} from "mendixmodelsdk";
+import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwidgets, projects, documenttemplates} from "mendixmodelsdk";
 import {MendixSdkClient, Project, OnlineWorkingCopy, loadAsPromise} from "mendixplatformsdk";
 import when = require("when");
 import fs = require("fs-extra");
 
 
-export namespace constants {
-    export namespace propertys {
-        export const ID : string = "ID";
-        export const NAME : string = "NAME";
-        export const TYPE : string = "TYPE";
-        export const CONTAINER : string = "CONTAINER";
-        export const CALLLOCATIONS : String = "CALLLOCATIONS";
-        export const CALLCOUNT : string = "CALLCOUNT"; 
-    }
-    export namespace filter {
-        export const ID : string = "FID";
-        export const NAME : string = "FNAME";
-        export const TYPE : string = "FTYPE";
-    }
-}
+
 
 
 class MxAProject {

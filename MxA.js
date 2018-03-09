@@ -13,24 +13,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mendixplatformsdk_1 = require("mendixplatformsdk");
 var when = require("when");
 var fs = require("fs-extra");
-var constants;
-(function (constants) {
-    var propertys;
-    (function (propertys) {
-        propertys.ID = "ID";
-        propertys.NAME = "NAME";
-        propertys.TYPE = "TYPE";
-        propertys.CONTAINER = "CONTAINER";
-        propertys.CALLLOCATIONS = "CALLLOCATIONS";
-        propertys.CALLCOUNT = "CALLCOUNT";
-    })(propertys = constants.propertys || (constants.propertys = {}));
-    var filter;
-    (function (filter) {
-        filter.ID = "FID";
-        filter.NAME = "FNAME";
-        filter.TYPE = "FTYPE";
-    })(filter = constants.filter || (constants.filter = {}));
-})(constants = exports.constants || (exports.constants = {}));
 var MxAProject = /** @class */ (function () {
     function MxAProject(username, apikey, appid) {
         this.name = username;
