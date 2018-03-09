@@ -2,6 +2,7 @@
 export class MxAObjectList
 {
     private objects : MxAObject[];      //Array of Objects
+    private propertylength : number = 20;
 
     constructor() {
         this.objects = new Array();
@@ -10,15 +11,19 @@ export class MxAObjectList
     //Add Object to Container
     public addObject(object : MxAObject) {
         this.objects[this.objects.length] = object;
+        if(object.getLongestPropertySize() > this.propertylength - 3)
+        {
+            this.propertylength = object.getLongestPropertySize() + 3;
+        }
     }
 
     //Serialize Container Objects
     public toTextFileString() {
         if(this.objects.length > 0) {
             let result : string = "";
-            result += this.objects[0].getHeaderNormalized() + "\n\n"; 
+            result += this.objects[0].getHeaderNormalized(this.propertylength) + "\n\n"; 
             this.objects.forEach((obj) => {
-                result += obj.toStringNormalized() + "\n";
+                result += obj.toStringNormalized(this.propertylength) + "\n";
             });
             return result;
         }
@@ -33,7 +38,6 @@ export class MxAObjectList
 //Container for a single MendixObject
 export class MxAObject {
     private propertys : MxAProperty[];   //Array of Propertys
-    private normalizedLength : number = 60;
 
     constructor(propertys : MxAProperty[]) {
         this.propertys = propertys;
@@ -66,10 +70,10 @@ export class MxAObject {
         return result;
     }
 
-    public toStringNormalized() {
+    public toStringNormalized(size : number) {
         let result : string = "";
         this.propertys.forEach((prop) => {
-            var delta = this.normalizedLength - prop.toString().length; 
+            var delta = size - prop.toString().length; 
             var str = prop.toString();
             for(var i = 0; i<delta; i++)
             {
@@ -89,10 +93,10 @@ export class MxAObject {
         return result;
     }
 
-    public getHeaderNormalized() {
+    public getHeaderNormalized(size : number) {
         let result : string = "";
         this.propertys.forEach((prop) => {
-            var delta = this.normalizedLength - prop.getName().length; 
+            var delta = size - prop.getName().length; 
             var str = prop.getName();
             for(var i = 0; i<delta; i++)
             {
@@ -103,7 +107,16 @@ export class MxAObject {
         return result;
     }
 
-    
+    public getLongestPropertySize() {
+        var size : number = 0;
+        this.propertys.forEach((prop) => {
+            if(prop.toString().length > size)
+            {
+                size = prop.toString().length;
+            }
+        });
+        return size;
+    }
 }
 
 //Container for a single MendixProperty

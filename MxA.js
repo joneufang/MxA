@@ -10,6 +10,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var mendixmodelsdk_1 = require("mendixmodelsdk");
 var mendixplatformsdk_1 = require("mendixplatformsdk");
 var when = require("when");
 var fs = require("fs-extra");
@@ -46,7 +47,21 @@ var MxAProject = /** @class */ (function () {
                         propertys[propertys.length] = new MxAO.MxAProperty("Type", doc.structureTypeName);
                     }
                     else if (qryprop == qrycons.documents.propertys.CONTAINER) {
-                        propertys[propertys.length] = new MxAO.MxAProperty("Container", "Platzhalter");
+                        var container = "Kein Container";
+                        try {
+                            var fbase = doc.containerAsFolderBase;
+                            if (fbase instanceof mendixmodelsdk_1.projects.Folder) {
+                                var folder = fbase;
+                                container = folder.name;
+                            }
+                            else if (fbase instanceof mendixmodelsdk_1.projects.Module) {
+                                var modul = fbase;
+                                container = modul.name;
+                            }
+                        }
+                        catch (_a) {
+                        }
+                        propertys[propertys.length] = new MxAO.MxAProperty("Container", container);
                     }
                     else {
                         propertys[propertys.length] = new MxAO.MxAProperty("Unknown Property", "Value of Unknown Property");

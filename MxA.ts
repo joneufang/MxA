@@ -59,7 +59,25 @@ class MxAProject {
                     }
                     else if(qryprop == qrycons.documents.propertys.CONTAINER)
                     {
-                        propertys[propertys.length] = new MxAO.MxAProperty("Container","Platzhalter");
+                        var container = "Kein Container"
+                        try{
+                            var fbase = doc.containerAsFolderBase;
+                            if(fbase instanceof projects.Folder)
+                            {
+                                var folder : projects.Folder = fbase;
+                                container = folder.name;
+                            }
+                            else if(fbase instanceof projects.Module)
+                            {
+                                var modul : projects.Module = fbase;
+                                container = modul.name;
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+                        propertys[propertys.length] = new MxAO.MxAProperty("Container",container);
                     }
                     else
                     {

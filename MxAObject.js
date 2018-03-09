@@ -3,19 +3,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //ClassContainer for a List of MendixObjects
 var MxAObjectList = /** @class */ (function () {
     function MxAObjectList() {
+        this.propertylength = 20;
         this.objects = new Array();
     }
     //Add Object to Container
     MxAObjectList.prototype.addObject = function (object) {
         this.objects[this.objects.length] = object;
+        if (object.getLongesPropertySize() > this.propertylength - 3) {
+            this.propertylength = object.getLongesPropertySize() + 3;
+        }
     };
     //Serialize Container Objects
     MxAObjectList.prototype.toTextFileString = function () {
+        var _this = this;
         if (this.objects.length > 0) {
             var result_1 = "";
-            result_1 += this.objects[0].getHeaderNormalized() + "\n\n";
+            result_1 += this.objects[0].getHeaderNormalized(this.propertylength) + "\n\n";
             this.objects.forEach(function (obj) {
-                result_1 += obj.toStringNormalized() + "\n";
+                result_1 += obj.toStringNormalized(_this.propertylength) + "\n";
             });
             return result_1;
         }
@@ -29,7 +34,6 @@ exports.MxAObjectList = MxAObjectList;
 //Container for a single MendixObject
 var MxAObject = /** @class */ (function () {
     function MxAObject(propertys) {
-        this.normalizedLength = 60;
         this.propertys = propertys;
     }
     //Add Property to Object
@@ -54,11 +58,10 @@ var MxAObject = /** @class */ (function () {
         });
         return result;
     };
-    MxAObject.prototype.toStringNormalized = function () {
-        var _this = this;
+    MxAObject.prototype.toStringNormalized = function (size) {
         var result = "";
         this.propertys.forEach(function (prop) {
-            var delta = _this.normalizedLength - prop.toString().length;
+            var delta = size - prop.toString().length;
             var str = prop.toString();
             for (var i = 0; i < delta; i++) {
                 str += ' ';
@@ -75,11 +78,10 @@ var MxAObject = /** @class */ (function () {
         });
         return result;
     };
-    MxAObject.prototype.getHeaderNormalized = function () {
-        var _this = this;
+    MxAObject.prototype.getHeaderNormalized = function (size) {
         var result = "";
         this.propertys.forEach(function (prop) {
-            var delta = _this.normalizedLength - prop.getName().length;
+            var delta = size - prop.getName().length;
             var str = prop.getName();
             for (var i = 0; i < delta; i++) {
                 str += ' ';
@@ -87,6 +89,15 @@ var MxAObject = /** @class */ (function () {
             result += str;
         });
         return result;
+    };
+    MxAObject.prototype.getLongesPropertySize = function () {
+        var size = 0;
+        this.propertys.forEach(function (prop) {
+            if (prop.toString().length > size) {
+                size = prop.toString().length;
+            }
+        });
+        return size;
     };
     return MxAObject;
 }());
