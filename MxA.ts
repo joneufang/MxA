@@ -2,6 +2,7 @@ import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwi
 import {MendixSdkClient, Project, OnlineWorkingCopy, loadAsPromise} from "mendixplatformsdk";
 import when = require("when");
 import fs = require("fs-extra");
+import * as MxAO from "./MxAObject"
 
 
 
@@ -33,15 +34,16 @@ class MxAProject {
 
     protected getDocsFromProject(propertys : string[], filterTypes : string[], filterValues : string[], sortcolumn : number[], resultType : string) {
         var result : string = "";
+        var erg : MxAO.MxAObjectList = new MxAO.MxAObjectList();
         
         this.project.createWorkingCopy().then((workingCopy) => {
             return workingCopy.model().allDocuments();
         })
         .then((documents) => { 
             documents.forEach((doc) => {
-
+                erg.addObject([new MxAO.MxAProperty("ID",doc.id),new MxAO.MxAProperty("Name",doc.qualifiedName),new MxAO.MxAProperty("Type",doc.structureTypeName)]);
                 
-                result += ("ID: " + doc.id + "\tName: " + doc.qualifiedName + "\tType: " + doc.structureTypeName + "\t\n");
+                //result += ("ID: " + doc.id + "\tName: " + doc.qualifiedName + "\tType: " + doc.structureTypeName + "\t\n");
             });
             return loadAllDocumentsAsPromise(documents);
         })
@@ -50,7 +52,8 @@ class MxAProject {
             console.log("Im Done!!!");
             if(resultType == MxAProject.TEXTFILE)
             {
-                fs.outputFile(this.file, result);
+                fs.outputFile(this.file, erg.toString());
+                //fs.outputFile(this.file, result);
             }
             else
             {

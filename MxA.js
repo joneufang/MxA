@@ -13,6 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mendixplatformsdk_1 = require("mendixplatformsdk");
 var when = require("when");
 var fs = require("fs-extra");
+var MxAO = require("./MxAObject");
 var MxAProject = /** @class */ (function () {
     function MxAProject(username, apikey, appid) {
         this.name = username;
@@ -24,19 +25,22 @@ var MxAProject = /** @class */ (function () {
     MxAProject.prototype.getDocsFromProject = function (propertys, filterTypes, filterValues, sortcolumn, resultType) {
         var _this = this;
         var result = "";
+        var erg = new MxAO.MxAObjectList();
         this.project.createWorkingCopy().then(function (workingCopy) {
             return workingCopy.model().allDocuments();
         })
             .then(function (documents) {
             documents.forEach(function (doc) {
-                result += ("ID: " + doc.id + "\tName: " + doc.qualifiedName + "\tType: " + doc.structureTypeName + "\t\n");
+                erg.addObject([new MxAO.MxAProperty("ID", doc.id), new MxAO.MxAProperty("Name", doc.qualifiedName), new MxAO.MxAProperty("Type", doc.structureTypeName)]);
+                //result += ("ID: " + doc.id + "\tName: " + doc.qualifiedName + "\tType: " + doc.structureTypeName + "\t\n");
             });
             return loadAllDocumentsAsPromise(documents);
         })
             .done(function () {
             console.log("Im Done!!!");
             if (resultType == MxAProject.TEXTFILE) {
-                fs.outputFile(_this.file, result);
+                fs.outputFile(_this.file, erg.toString());
+                //fs.outputFile(this.file, result);
             }
             else {
                 console.log("Wrong ResultType");
