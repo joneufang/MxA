@@ -11,16 +11,18 @@ export class MxAObjectList
     //Add Object to Container
     public addObject(object : MxAObject) {
         this.objects[this.objects.length] = object;
-        if(object.getLongestPropertySize() > this.propertylength - 3)
-        {
-            this.propertylength = object.getLongestPropertySize() + 3;
-        }
     }
 
     //Serialize Container Objects
     public toTextFileString() {
         if(this.objects.length > 0) {
             let result : string = "";
+            this.objects.forEach((obj) => {
+                if(obj.getLongestPropertySize() > this.propertylength - 3)
+                {
+                    this.propertylength = obj.getLongestPropertySize() + 3;
+                }
+            });
             result += this.objects[0].getHeaderNormalized(this.propertylength) + "\n\n"; 
             this.objects.forEach((obj) => {
                 result += obj.toStringNormalized(this.propertylength) + "\n";

@@ -9,15 +9,17 @@ var MxAObjectList = /** @class */ (function () {
     //Add Object to Container
     MxAObjectList.prototype.addObject = function (object) {
         this.objects[this.objects.length] = object;
-        if (object.getLongesPropertySize() > this.propertylength - 3) {
-            this.propertylength = object.getLongesPropertySize() + 3;
-        }
     };
     //Serialize Container Objects
     MxAObjectList.prototype.toTextFileString = function () {
         var _this = this;
         if (this.objects.length > 0) {
             var result_1 = "";
+            this.objects.forEach(function (obj) {
+                if (obj.getLongestPropertySize() > _this.propertylength - 3) {
+                    _this.propertylength = obj.getLongestPropertySize() + 3;
+                }
+            });
             result_1 += this.objects[0].getHeaderNormalized(this.propertylength) + "\n\n";
             this.objects.forEach(function (obj) {
                 result_1 += obj.toStringNormalized(_this.propertylength) + "\n";
@@ -90,7 +92,7 @@ var MxAObject = /** @class */ (function () {
         });
         return result;
     };
-    MxAObject.prototype.getLongesPropertySize = function () {
+    MxAObject.prototype.getLongestPropertySize = function () {
         var size = 0;
         this.propertys.forEach(function (prop) {
             if (prop.toString().length > size) {
