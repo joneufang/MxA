@@ -63,10 +63,17 @@ class MxAProject {
                     }
                 })
                 mxaobj = new MxAO.MxAObject(propertys);
-                result.addObject(mxaobj);
-                //qryfilterTypes.forEach((qryfilter) => {
-
-                //})
+                //result.addObject(mxaobj);
+                qryfilterTypes.forEach((qryfilter) => {
+                    if(!(mxaobj.getPropertyValue(qryfilter) == qryfilterValues[filtercount])) {
+                        filtered = true;
+                    }
+                    filtercount++;
+                })
+                if(!filtered)
+                {
+                    result.addObject(mxaobj);
+                }
             });
             return loadAllDocumentsAsPromise(documents);
         })

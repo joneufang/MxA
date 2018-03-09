@@ -9,6 +9,6 @@ let projectId = `01bfc705-81e4-4ffa-8bc9-0c43e7f2b5ba`;
 
 
 let project = new mendixanalytics.MxAToTextFile(username, apikey, projectId, "./Test.txt");
-project.getDocumentsFromProject([qrycons.documents.propertys.ID,qrycons.documents.propertys.NAME,qrycons.documents.propertys.TYPE], [qrycons.documents.filter.ID], ["Test"], [1]); 
+project.getDocumentsFromProject([qrycons.documents.propertys.ID,qrycons.documents.propertys.NAME,qrycons.documents.propertys.TYPE], [], ["Test"], [1]);  //unfiltered Result
 
 

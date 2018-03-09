@@ -1,16 +1,16 @@
 
 export namespace documents {
     export namespace propertys {
-        export const ID : string = "ID";
-        export const NAME : string = "NAME";
-        export const TYPE : string = "TYPE";
+        export const ID : string = "Id";
+        export const NAME : string = "Name";
+        export const TYPE : string = "Type";
         export const CONTAINER : string = "CONTAINER";
         export const CALLLOCATIONS : String = "CALLLOCATIONS";
         export const CALLCOUNT : string = "CALLCOUNT"; 
     }
     export namespace filter {
-        export const ID : string = "FID";
-        export const NAME : string = "FNAME";
-        export const TYPE : string = "FTYPE";
+        export const ID : string = "Id";
+        export const NAME : string = "Name";
+        export const TYPE : string = "Type";
     }
 }

@@ -4,17 +4,17 @@ var documents;
 (function (documents) {
     var propertys;
     (function (propertys) {
-        propertys.ID = "ID";
-        propertys.NAME = "NAME";
-        propertys.TYPE = "TYPE";
+        propertys.ID = "Id";
+        propertys.NAME = "Name";
+        propertys.TYPE = "Type";
         propertys.CONTAINER = "CONTAINER";
         propertys.CALLLOCATIONS = "CALLLOCATIONS";
         propertys.CALLCOUNT = "CALLCOUNT";
     })(propertys = documents.propertys || (documents.propertys = {}));
     var filter;
     (function (filter) {
-        filter.ID = "FID";
-        filter.NAME = "FNAME";
-        filter.TYPE = "FTYPE";
+        filter.ID = "Id";
+        filter.NAME = "Name";
+        filter.TYPE = "Type";
     })(filter = documents.filter || (documents.filter = {}));
 })(documents = exports.documents || (exports.documents = {}));

@@ -37,6 +37,17 @@ export class MxAObject {
         this.propertys[this.propertys.length] = prop
     }
 
+    public getPropertyValue(name : string)
+    {
+        this.propertys.forEach((prop) => {
+            if(prop.getName() == name)
+            {
+                return prop.toString();
+            }
+        });
+        return "Property not found"; 
+    }
+
     //Serialize ObjectData
     public toString() {
         let result : string = "";

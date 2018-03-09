@@ -31,6 +31,14 @@ var MxAObject = /** @class */ (function () {
         var prop = new MxAProperty(name, value);
         this.propertys[this.propertys.length] = prop;
     };
+    MxAObject.prototype.getPropertyValue = function (name) {
+        this.propertys.forEach(function (prop) {
+            if (prop.getName() == name) {
+                return prop.toString();
+            }
+        });
+        return "Property not found";
+    };
     //Serialize ObjectData
     MxAObject.prototype.toString = function () {
         var result = "";
