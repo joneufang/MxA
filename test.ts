@@ -10,6 +10,7 @@ let projectId = `01bfc705-81e4-4ffa-8bc9-0c43e7f2b5ba`;
 <<<<<<< HEAD
 let project = new mendixanalytics.MxAToTextFile(username, apikey, projectId, "./Test.txt");
 project.getDocumentsFromProject([qrycons.documents.propertys.ID], [qrycons.documents.filter.ID], ["Test"], [1]); project.getDocumentsFromProject([qrycons.documents.propertys.ID], [qrycons.documents.filter.ID], ["Test"], [1]); 
+project.getDocumentsFromProject([qrycons.documents.propertys.ID], [qrycons.documents.filter.ID], ["Test"], [1]); 
 =======
 let mxap = new mendixanalytics.MxAToTextFile(username, apikey, projectId, "./Test.txt");
 mxap.getDocumentsFromProject([mendixanalytics.constants.propertys.ID], [mendixanalytics.constants.filter.ID], ["Test"], [1]); 
