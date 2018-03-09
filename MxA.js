@@ -14,6 +14,7 @@ var mendixplatformsdk_1 = require("mendixplatformsdk");
 var when = require("when");
 var fs = require("fs-extra");
 var MxAO = require("./MxAObject");
+var qrycons = require("./QueryConstants");
 var MxAProject = /** @class */ (function () {
     function MxAProject(username, apikey, appid) {
         this.name = username;
@@ -22,7 +23,7 @@ var MxAProject = /** @class */ (function () {
         this.client = new mendixplatformsdk_1.MendixSdkClient(this.name, this.key);
         this.project = new mendixplatformsdk_1.Project(this.client, this.id, "");
     }
-    MxAProject.prototype.getDocsFromProject = function (propertys, filterTypes, filterValues, sortcolumn, resultType) {
+    MxAProject.prototype.getDocsFromProject = function (qrypropertys, qryfilterTypes, qryfilterValues, qrysortcolumn, qryresultType) {
         var _this = this;
         var result = new MxAO.MxAObjectList();
         this.project.createWorkingCopy().then(function (workingCopy) {
@@ -30,13 +31,29 @@ var MxAProject = /** @class */ (function () {
         })
             .then(function (documents) {
             documents.forEach(function (doc) {
-                result.addObject([new MxAO.MxAProperty("ID", doc.id), new MxAO.MxAProperty("Name", doc.qualifiedName), new MxAO.MxAProperty("Type", doc.structureTypeName)]);
+                var propertys = new Array();
+                qrypropertys.forEach(function (qryprop) {
+                    if (qryprop == qrycons.documents.propertys.ID) {
+                        propertys[propertys.length] = new MxAO.MxAProperty("ID", doc.id);
+                    }
+                    else if (qryprop == qrycons.documents.propertys.NAME) {
+                        propertys[propertys.length] = new MxAO.MxAProperty("Name", doc.qualifiedName);
+                    }
+                    else if (qryprop == qrycons.documents.propertys.TYPE) {
+                        propertys[propertys.length] = new MxAO.MxAProperty("Type", doc.structureTypeName);
+                    }
+                    else {
+                        propertys[propertys.length] = new MxAO.MxAProperty("Unknown Property", "Value of Unknown Property");
+                    }
+                });
+                result.addObject(propertys);
+                //result.addObject([new MxAO.MxAProperty("ID",doc.id),new MxAO.MxAProperty("Name",doc.qualifiedName),new MxAO.MxAProperty("Type",doc.structureTypeName)]);
             });
             return loadAllDocumentsAsPromise(documents);
         })
             .done(function () {
             console.log("Im Done!!!");
-            if (resultType == MxAProject.TEXTFILE) {
+            if (qryresultType == MxAProject.TEXTFILE) {
                 fs.outputFile(_this.file, result.toString());
             }
             else {
