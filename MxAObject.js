@@ -11,12 +11,17 @@ var MxAObjectList = /** @class */ (function () {
     };
     //Serialize Container Objects
     MxAObjectList.prototype.toString = function () {
-        var result = "";
-        result += this.objects[0].getheader() + "\n";
-        this.objects.forEach(function (obj) {
-            result += obj.toString() + "\n";
-        });
-        return result;
+        if (this.objects.length > 0) {
+            var result_1 = "";
+            result_1 += this.objects[0].getheader() + "\n";
+            this.objects.forEach(function (obj) {
+                result_1 += obj.toString() + "\n";
+            });
+            return result_1;
+        }
+        else {
+            return "No Entrys Found";
+        }
     };
     return MxAObjectList;
 }());
@@ -32,12 +37,13 @@ var MxAObject = /** @class */ (function () {
         this.propertys[this.propertys.length] = prop;
     };
     MxAObject.prototype.getPropertyValue = function (name) {
+        var value = "Property not found";
         this.propertys.forEach(function (prop) {
             if (prop.getName() == name) {
-                return prop.toString();
+                value = prop.toString();
             }
         });
-        return "Property not found";
+        return value;
     };
     //Serialize ObjectData
     MxAObject.prototype.toString = function () {

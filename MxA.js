@@ -50,7 +50,6 @@ var MxAProject = /** @class */ (function () {
                     }
                 });
                 mxaobj = new MxAO.MxAObject(propertys);
-                //result.addObject(mxaobj);
                 qryfilterTypes.forEach(function (qryfilter) {
                     if (!(mxaobj.getPropertyValue(qryfilter) == qryfilterValues[filtercount])) {
                         filtered = true;

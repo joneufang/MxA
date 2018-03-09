@@ -63,7 +63,6 @@ class MxAProject {
                     }
                 })
                 mxaobj = new MxAO.MxAObject(propertys);
-                //result.addObject(mxaobj);
                 qryfilterTypes.forEach((qryfilter) => {
                     if(!(mxaobj.getPropertyValue(qryfilter) == qryfilterValues[filtercount])) {
                         filtered = true;

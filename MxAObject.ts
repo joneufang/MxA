@@ -14,12 +14,19 @@ export class MxAObjectList
 
     //Serialize Container Objects
     public toString() {
-        let result : string = "";
-        result += this.objects[0].getheader() + "\n"; 
-        this.objects.forEach((obj) => {
-            result += obj.toString() + "\n";
-        });
-        return result;
+        if(this.objects.length > 0) {
+            let result : string = "";
+            result += this.objects[0].getheader() + "\n"; 
+            this.objects.forEach((obj) => {
+                result += obj.toString() + "\n";
+            });
+            return result;
+        }
+        else
+        {
+            return "No Entrys Found";
+        }
+        
     }
 }
 
@@ -39,13 +46,14 @@ export class MxAObject {
 
     public getPropertyValue(name : string)
     {
+        var value : string = "Property not found";
         this.propertys.forEach((prop) => {
             if(prop.getName() == name)
             {
-                return prop.toString();
+                value = prop.toString();
             }
         });
-        return "Property not found"; 
+        return value; 
     }
 
     //Serialize ObjectData
