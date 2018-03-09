@@ -32,6 +32,9 @@ var MxAProject = /** @class */ (function () {
             .then(function (documents) {
             documents.forEach(function (doc) {
                 var propertys = new Array();
+                var filtered = false;
+                var filtercount = 0;
+                var mxaobj;
                 qrypropertys.forEach(function (qryprop) {
                     if (qryprop == qrycons.documents.propertys.ID) {
                         propertys[propertys.length] = new MxAO.MxAProperty("ID", doc.id);
@@ -46,8 +49,10 @@ var MxAProject = /** @class */ (function () {
                         propertys[propertys.length] = new MxAO.MxAProperty("Unknown Property", "Value of Unknown Property");
                     }
                 });
-                result.addObject(propertys);
-                //result.addObject([new MxAO.MxAProperty("ID",doc.id),new MxAO.MxAProperty("Name",doc.qualifiedName),new MxAO.MxAProperty("Type",doc.structureTypeName)]);
+                mxaobj = new MxAO.MxAObject(propertys);
+                result.addObject(mxaobj);
+                //qryfilterTypes.forEach((qryfilter) => {
+                //})
             });
             return loadAllDocumentsAsPromise(documents);
         })

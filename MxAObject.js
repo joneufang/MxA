@@ -6,12 +6,8 @@ var MxAObjectList = /** @class */ (function () {
         this.objects = new Array();
     }
     //Add Object to Container
-    MxAObjectList.prototype.addObject = function (propertys) {
-        var obj = new MxAObject();
-        propertys.forEach(function (prop) {
-            obj.addProperty(prop.getName(), prop.toString());
-        });
-        this.objects[this.objects.length] = obj;
+    MxAObjectList.prototype.addObject = function (object) {
+        this.objects[this.objects.length] = object;
     };
     //Serialize Container Objects
     MxAObjectList.prototype.toString = function () {
@@ -27,8 +23,8 @@ var MxAObjectList = /** @class */ (function () {
 exports.MxAObjectList = MxAObjectList;
 //Container for a single MendixObject
 var MxAObject = /** @class */ (function () {
-    function MxAObject() {
-        this.propertys = new Array();
+    function MxAObject(propertys) {
+        this.propertys = propertys;
     }
     //Add Property to Object
     MxAObject.prototype.addProperty = function (name, value) {

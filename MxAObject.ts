@@ -8,12 +8,8 @@ export class MxAObjectList
     }
 
     //Add Object to Container
-    public addObject(propertys : MxAProperty[]) {
-        let obj = new MxAObject();
-        propertys.forEach((prop) => {
-            obj.addProperty(prop.getName(), prop.toString());
-        })
-        this.objects[this.objects.length] = obj;
+    public addObject(object : MxAObject) {
+        this.objects[this.objects.length] = object;
     }
 
     //Serialize Container Objects
@@ -31,8 +27,8 @@ export class MxAObjectList
 export class MxAObject {
     private propertys : MxAProperty[];   //Array of Propertys
 
-    constructor() {
-        this.propertys = new Array();
+    constructor(propertys : MxAProperty[]) {
+        this.propertys = propertys;
     }
 
     //Add Property to Object
