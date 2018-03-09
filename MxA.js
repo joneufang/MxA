@@ -45,13 +45,18 @@ var MxAProject = /** @class */ (function () {
                     else if (qryprop == qrycons.documents.propertys.TYPE) {
                         propertys[propertys.length] = new MxAO.MxAProperty("Type", doc.structureTypeName);
                     }
+                    else if (qryprop == qrycons.documents.propertys.CONTAINER) {
+                        propertys[propertys.length] = new MxAO.MxAProperty("Container", "Platzhalter");
+                    }
                     else {
                         propertys[propertys.length] = new MxAO.MxAProperty("Unknown Property", "Value of Unknown Property");
                     }
                 });
                 mxaobj = new MxAO.MxAObject(propertys);
                 qryfilterTypes.forEach(function (qryfilter) {
-                    if (!(mxaobj.getPropertyValue(qryfilter) == qryfilterValues[filtercount])) {
+                    var regex = qryfilterValues[filtercount];
+                    var value = mxaobj.getPropertyValue(qryfilter);
+                    if (!(value.match(regex) || regex == value)) {
                         filtered = true;
                     }
                     filtercount++;
@@ -65,7 +70,7 @@ var MxAProject = /** @class */ (function () {
             .done(function () {
             console.log("Im Done!!!");
             if (qryresultType == MxAProject.TEXTFILE) {
-                fs.outputFile(_this.file, result.toString());
+                fs.outputFile(_this.file, result.toTextFileString());
             }
             else {
                 console.log("Wrong ResultType");

@@ -13,12 +13,12 @@ export class MxAObjectList
     }
 
     //Serialize Container Objects
-    public toString() {
+    public toTextFileString() {
         if(this.objects.length > 0) {
             let result : string = "";
-            result += this.objects[0].getheader() + "\n"; 
+            result += this.objects[0].getHeaderNormalized() + "\n\n"; 
             this.objects.forEach((obj) => {
-                result += obj.toString() + "\n";
+                result += obj.toStringNormalized() + "\n";
             });
             return result;
         }
@@ -33,6 +33,7 @@ export class MxAObjectList
 //Container for a single MendixObject
 export class MxAObject {
     private propertys : MxAProperty[];   //Array of Propertys
+    private normalizedLength : number = 60;
 
     constructor(propertys : MxAProperty[]) {
         this.propertys = propertys;
@@ -65,14 +66,44 @@ export class MxAObject {
         return result;
     }
 
+    public toStringNormalized() {
+        let result : string = "";
+        this.propertys.forEach((prop) => {
+            var delta = this.normalizedLength - prop.toString().length; 
+            var str = prop.toString();
+            for(var i = 0; i<delta; i++)
+            {
+                str += ' ';
+            }
+            result += str;
+        });
+        return result;
+    }
+
     //Serialize Object Property Names
-    public getheader() {
+    public getHeader() {
         let result : string = "";
         this.propertys.forEach((prop) => {
             result += prop.getName() + "\t";
         });
         return result;
     }
+
+    public getHeaderNormalized() {
+        let result : string = "";
+        this.propertys.forEach((prop) => {
+            var delta = this.normalizedLength - prop.getName().length; 
+            var str = prop.getName();
+            for(var i = 0; i<delta; i++)
+            {
+                str += ' ';
+            }
+            result += str;
+        });
+        return result;
+    }
+
+    
 }
 
 //Container for a single MendixProperty

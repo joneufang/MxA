@@ -7,7 +7,7 @@ var documents;
         propertys.ID = "Id";
         propertys.NAME = "Name";
         propertys.TYPE = "Type";
-        propertys.CONTAINER = "CONTAINER";
+        propertys.CONTAINER = "Container";
         propertys.CALLLOCATIONS = "CALLLOCATIONS";
         propertys.CALLCOUNT = "CALLCOUNT";
     })(propertys = documents.propertys || (documents.propertys = {}));

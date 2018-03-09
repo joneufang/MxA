@@ -10,12 +10,12 @@ var MxAObjectList = /** @class */ (function () {
         this.objects[this.objects.length] = object;
     };
     //Serialize Container Objects
-    MxAObjectList.prototype.toString = function () {
+    MxAObjectList.prototype.toTextFileString = function () {
         if (this.objects.length > 0) {
             var result_1 = "";
-            result_1 += this.objects[0].getheader() + "\n";
+            result_1 += this.objects[0].getHeaderNormalized() + "\n\n";
             this.objects.forEach(function (obj) {
-                result_1 += obj.toString() + "\n";
+                result_1 += obj.toStringNormalized() + "\n";
             });
             return result_1;
         }
@@ -29,6 +29,7 @@ exports.MxAObjectList = MxAObjectList;
 //Container for a single MendixObject
 var MxAObject = /** @class */ (function () {
     function MxAObject(propertys) {
+        this.normalizedLength = 60;
         this.propertys = propertys;
     }
     //Add Property to Object
@@ -53,11 +54,37 @@ var MxAObject = /** @class */ (function () {
         });
         return result;
     };
+    MxAObject.prototype.toStringNormalized = function () {
+        var _this = this;
+        var result = "";
+        this.propertys.forEach(function (prop) {
+            var delta = _this.normalizedLength - prop.toString().length;
+            var str = prop.toString();
+            for (var i = 0; i < delta; i++) {
+                str += ' ';
+            }
+            result += str;
+        });
+        return result;
+    };
     //Serialize Object Property Names
-    MxAObject.prototype.getheader = function () {
+    MxAObject.prototype.getHeader = function () {
         var result = "";
         this.propertys.forEach(function (prop) {
             result += prop.getName() + "\t";
+        });
+        return result;
+    };
+    MxAObject.prototype.getHeaderNormalized = function () {
+        var _this = this;
+        var result = "";
+        this.propertys.forEach(function (prop) {
+            var delta = _this.normalizedLength - prop.getName().length;
+            var str = prop.getName();
+            for (var i = 0; i < delta; i++) {
+                str += ' ';
+            }
+            result += str;
         });
         return result;
     };

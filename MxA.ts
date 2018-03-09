@@ -57,6 +57,10 @@ class MxAProject {
                     {
                         propertys[propertys.length] = new MxAO.MxAProperty("Type",doc.structureTypeName);
                     }
+                    else if(qryprop == qrycons.documents.propertys.CONTAINER)
+                    {
+                        propertys[propertys.length] = new MxAO.MxAProperty("Container","Platzhalter");
+                    }
                     else
                     {
                         propertys[propertys.length] = new MxAO.MxAProperty("Unknown Property","Value of Unknown Property");
@@ -64,7 +68,10 @@ class MxAProject {
                 })
                 mxaobj = new MxAO.MxAObject(propertys);
                 qryfilterTypes.forEach((qryfilter) => {
-                    if(!(mxaobj.getPropertyValue(qryfilter) == qryfilterValues[filtercount])) {
+                    var regex = qryfilterValues[filtercount];
+                    var value = mxaobj.getPropertyValue(qryfilter); 
+                    if(!(value.match(regex) || regex == value))
+                    {
                         filtered = true;
                     }
                     filtercount++;
@@ -81,7 +88,7 @@ class MxAProject {
             console.log("Im Done!!!");
             if(qryresultType == MxAProject.TEXTFILE)
             {
-                fs.outputFile(this.file, result.toString());
+                fs.outputFile(this.file, result.toTextFileString());
             }
             else
             {
