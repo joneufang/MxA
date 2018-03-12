@@ -1,7 +1,6 @@
 import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwidgets, projects, documenttemplates} from "mendixmodelsdk";
 import {MendixSdkClient, Project, OnlineWorkingCopy, loadAsPromise} from "mendixplatformsdk";
 import when = require("when");
-import fs = require("fs-extra");
 import * as MxAO from "./MxAOutputObject";
 import * as MxAA from "./MxAObjectAdapter";
 import * as qrycons from "./QueryConstants";
@@ -15,13 +14,18 @@ class MxAProject {
     protected static readonly XML = "XML";
     protected static readonly JSON = "JSON";
 
+    //Constants to define output target
+    protected readonly TEXTFILE = "TEXTFILE";            
+    protected readonly HTMLTABLE = "HTMLTABLE";
+    protected readonly XML = "XML";
+    protected readonly JSON = "JSON";
+
     protected name : string;        //username for Mendix SDK
     protected key : string;         //API-Key for Mendix SDK
     protected id : string;          //AppID for Mendix SDK
 
-    protected file : string;        //Output: Textfile
-    protected htmlresult : string;  //Output: Name of HTMLElement for Result
-    protected htmlerror : string;   //Output: Name of HTMLElement for Errors
+    protected target : string;        //Name of Ouptput target
+  
 
     protected client : MendixSdkClient;     //Mendix SDK client
     protected project : Project;            //Mendix SDK Project
@@ -57,6 +61,7 @@ class MxAProject {
         })
         .done((loadeddocs) => {
         
+            //Get filtered Documents
             loadeddocs.forEach((doc) => {
                 if(doc instanceof projects.Document){
                     var documentadapter : MxAA.MxADocumentAdapter = new MxAA.MxADocumentAdapter();
@@ -67,6 +72,7 @@ class MxAProject {
     
                     mxaobj = new MxAO.MxAOutputObject(propertys);
 
+                    //filter
                     if(documentadapter.filter(mxaobj,qryfiltertypes, qryfiltervalues))
                     {
                         outputobjects.addObject(mxaobj);
@@ -79,20 +85,13 @@ class MxAProject {
                 
             });
 
+            //Sort Objects
             outputobjects = outputobjects.sort(qrysortcolumns);
 
-            //Auslagern !!!!!!!!!!
-            console.log("Im Done!!!");
-            if(qryresulttype == MxAProject.TEXTFILE)
-            {
-                fs.outputFile(this.file, outputobjects.toTextFileString());
-            }
-            else
-            {
-                console.log("Wrong ResultType");
-            }
-            
+            //Return As Output Type
+            outputobjects.returnResult(this.TEXTFILE,this.target)
 
+            console.log("Im Done!!!");
         });
 
     }
@@ -106,12 +105,9 @@ class MxAProject {
 //Mendix Analytics Project with HTMLElement as ResultType
 export class MxAToHtmlTable extends MxAProject {
 
-    public constructor(username : string, apikey : string, appid : string, htmlresultfield : string, htmlerrorfield? : string) {
+    public constructor(username : string, apikey : string, appid : string, htmlresultfield : string) {
         super(username, apikey, appid);
-        this.htmlresult = htmlresultfield;
-        if(htmlerrorfield) {
-            this.htmlerror = htmlerrorfield;
-        }
+        this.target = htmlresultfield;
     }
 
     public getDocumentsFromProject(propertys : string[], filterTypes : string[], filterValues : string[], sortcolumn : string[]) {
@@ -125,7 +121,7 @@ export class MxAToTextFile extends MxAProject {
 
     public constructor(username : string, apikey : string, appid : string, textfile : string) {
         super(username, apikey, appid);
-        this.file = textfile;
+        this.target = textfile;
     }
 
     public getDocumentsFromProject(propertys : string[], filterTypes : string[], filterValues : string[], sortcolumn : string[]) {

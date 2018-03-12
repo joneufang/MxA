@@ -1,6 +1,14 @@
+import fs = require("fs-extra");
+
 //ClassContainer for a List of OutputObjects
 export class MxAOutputObjectList
 {
+     //Constants to define output target
+    protected readonly TEXTFILE = "TEXTFILE";            
+    protected readonly HTMLTABLE = "HTMLTABLE";
+    protected readonly XML = "XML";
+    protected readonly JSON = "JSON";
+
     private objects : MxAOutputObject[];      //Array of Objects
     private propertylength : number = 20;       //Length of columns for TextFile Output
 
@@ -47,7 +55,7 @@ export class MxAOutputObjectList
     }
 
     //Serialize Container Objects
-    public toTextFileString() {
+    protected toTextFileString() {
         if(this.objects.length > 0) {
             let result : string = "";
             this.objects.forEach((obj) => {
@@ -68,6 +76,20 @@ export class MxAOutputObjectList
         }
         
     }
+
+    //Gives out OutputObjectList
+    public returnResult(resultType : string, target : string) {
+        if(resultType == this.TEXTFILE)
+        {
+            fs.outputFile(target, this.toTextFileString());
+        }                                                       //Add ResultTypes Here
+        else
+        {
+            console.log("Wrong ResultType");
+        }
+    }
+
+    
 }
 
 //Container for a single MendixObject

@@ -1,8 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var fs = require("fs-extra");
 //ClassContainer for a List of OutputObjects
 var MxAOutputObjectList = /** @class */ (function () {
     function MxAOutputObjectList() {
+        //Constants to define output target
+        this.TEXTFILE = "TEXTFILE";
+        this.HTMLTABLE = "HTMLTABLE";
+        this.XML = "XML";
+        this.JSON = "JSON";
         this.propertylength = 20; //Length of columns for TextFile Output
         this.objects = new Array();
     }
@@ -53,6 +59,15 @@ var MxAOutputObjectList = /** @class */ (function () {
         }
         else {
             return "No Entrys Found";
+        }
+    };
+    //Gives out OutputObjectList
+    MxAOutputObjectList.prototype.returnResult = function (resultType, target) {
+        if (resultType == this.TEXTFILE) {
+            fs.outputFile(target, this.toTextFileString());
+        } //Add ResultTypes Here
+        else {
+            console.log("Wrong ResultType");
         }
     };
     return MxAOutputObjectList;
