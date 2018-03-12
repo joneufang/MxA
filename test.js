@@ -8,6 +8,7 @@ var apikey = 'e6a890bf-6377-4395-8924-87bfe8da7330';
 var projectName = "7-2-0-ATSTest";
 var projectId = "01bfc705-81e4-4ffa-8bc9-0c43e7f2b5ba";
 var project = new mendixanalytics.MxAToTextFile(username, apikey, projectId, "./Test.txt");
+//let project = new mendixanalytics.MxAToXMLFile(username, apikey, projectId, "./Test.xml");
 //project.getDocumentsFromProject([qrycons.propertys.ALL], [], [], [1]); //All Propertys unfiltered
 project.getDocumentsFromProject([QueryConstants_1.documents.propertys.ID, QueryConstants_1.documents.propertys.NAME, QueryConstants_1.documents.propertys.TYPE, QueryConstants_1.documents.propertys.CONTAINER], [], [], [QueryConstants_1.documents.sorting.TYPE, QueryConstants_1.documents.sorting.NAME]); //unfiltered Result with sorting
 //project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME,qrycons.propertys.TYPE], [qrycons.filter.TYPE,qrycons.filter.NAME], ["Microflow","Testapp"], []); //filtered Result
@@ -96,4 +97,23 @@ var sortedobjects = objects.sort([qrycons.sorting.TYPE,qrycons.sorting.NAME]);
 
 console.log("NachSort\n");
 console.log(sortedobjects.toTextFileString());
-console.log("NachSort\n");*/ 
+console.log("NachSort\n");*/
+//XMLWRITER TEST
+/*
+var xml = new XMLWriter();
+
+xml.startDocument();
+xml.startElement("MxAObject");
+xml.startElement("ID");
+xml.text("idvalue");
+xml.endElement();
+xml.startElement("Name");
+xml.text("Namevalue");
+xml.endElement();
+xml.startElement("Type");
+xml.text("Typevalue");
+xml.endElement();
+xml.endElement();
+xml.endDocument();
+
+fs.outputFile("Test.xml",xml.toString());*/

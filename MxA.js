@@ -19,11 +19,6 @@ var MxAA = require("./MxAObjectAdapter");
 var MxAProject = /** @class */ (function () {
     //Standard Constructor creates Mendix SDK Client and Project
     function MxAProject(username, apikey, appid) {
-        //Constants to define output target
-        this.TEXTFILE = "TEXTFILE";
-        this.HTMLTABLE = "HTMLTABLE";
-        this.XML = "XML";
-        this.JSON = "JSON";
         this.name = username;
         this.key = apikey;
         this.id = appid;
@@ -68,7 +63,7 @@ var MxAProject = /** @class */ (function () {
             //Sort Objects
             outputobjects = outputobjects.sort(qrysortcolumns);
             //Return As Output Type
-            outputobjects.returnResult(_this.TEXTFILE, _this.target);
+            outputobjects.returnResult(qryresulttype, _this.target);
             console.log("Im Done!!!");
         });
     };
@@ -110,3 +105,17 @@ var MxAToTextFile = /** @class */ (function (_super) {
     return MxAToTextFile;
 }(MxAProject));
 exports.MxAToTextFile = MxAToTextFile;
+//Mendix Analytics Project with XMLFile as ResultType
+var MxAToXMLFile = /** @class */ (function (_super) {
+    __extends(MxAToXMLFile, _super);
+    function MxAToXMLFile(username, apikey, appid, xmlfile) {
+        var _this = _super.call(this, username, apikey, appid) || this;
+        _this.target = xmlfile;
+        return _this;
+    }
+    MxAToXMLFile.prototype.getDocumentsFromProject = function (propertys, filterTypes, filterValues, sortcolumn) {
+        _super.prototype.getDocsFromProject.call(this, propertys, filterTypes, filterValues, sortcolumn, MxAProject.XML);
+    };
+    return MxAToXMLFile;
+}(MxAProject));
+exports.MxAToXMLFile = MxAToXMLFile;

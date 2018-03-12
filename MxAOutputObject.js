@@ -41,7 +41,7 @@ var MxAOutputObjectList = /** @class */ (function () {
             }
         }
     };
-    //Serialize Container Objects
+    //Serialize Container Objects for a TextFile
     MxAOutputObjectList.prototype.toTextFileString = function () {
         var _this = this;
         if (this.objects.length > 0) {
@@ -61,11 +61,50 @@ var MxAOutputObjectList = /** @class */ (function () {
             return "No Entrys Found";
         }
     };
+    //Serialize Container Objects for a XML File
+    MxAOutputObjectList.prototype.toXMLFileString = function () {
+        if (this.objects.length > 0) {
+            var result_2 = "";
+            result_2 += "<?xml version=\"1.0\"?>\n";
+            this.objects.forEach(function (obj) {
+                result_2 += "<MxAObject>" + "\n";
+                result_2 += obj.toXMLString();
+                result_2 += "</MxAObject>" + "\n";
+            });
+            return result_2;
+        }
+        else {
+            return "No Entrys Found";
+        }
+    };
+    /*
+    protected toXMLFileString2() {
+        var xml = new XMLWriter();
+        
+        
+        if(this.objects.length > 0) {
+            xml.startDocument();
+            this.objects.forEach((obj) => {
+                xml.startElement("MxAObject");
+                xml = obj.toXMLString2(xml);
+                xml.endElement();
+            });
+            xml.endDocument();
+            return xml.toString();
+        }
+        else
+        {
+            return "No Entrys Found";
+        }
+    }*/
     //Gives out OutputObjectList
     MxAOutputObjectList.prototype.returnResult = function (resultType, target) {
         if (resultType == this.TEXTFILE) {
             fs.outputFile(target, this.toTextFileString());
         } //Add ResultTypes Here
+        else if (resultType == this.XML) {
+            fs.outputFile(target, this.toXMLFileString());
+        }
         else {
             console.log("Wrong ResultType");
         }
@@ -101,6 +140,23 @@ var MxAOutputObject = /** @class */ (function () {
         });
         return result;
     };
+    //Serialzie ObjectData to XML
+    MxAOutputObject.prototype.toXMLString = function () {
+        var result = "";
+        this.propertys.forEach(function (prop) {
+            result += "\t<" + prop.getName() + ">" + prop.toString() + "</" + prop.getName() + ">" + "\n";
+        });
+        return result;
+    };
+    /*
+    public toXMLString2(xml : XMLWriter) {
+        this.propertys.forEach((prop) => {
+            xml.startElement(prop.getName());
+            xml.text(prop.toString());
+            xml.endElement();
+        });
+        return xml;
+    }*/
     //Serialize ObjectData with Column length size for TextFile Output
     MxAOutputObject.prototype.toStringNormalized = function (size) {
         var result = "";

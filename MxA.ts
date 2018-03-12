@@ -14,12 +14,6 @@ class MxAProject {
     protected static readonly XML = "XML";
     protected static readonly JSON = "JSON";
 
-    //Constants to define output target
-    protected readonly TEXTFILE = "TEXTFILE";            
-    protected readonly HTMLTABLE = "HTMLTABLE";
-    protected readonly XML = "XML";
-    protected readonly JSON = "JSON";
-
     protected name : string;        //username for Mendix SDK
     protected key : string;         //API-Key for Mendix SDK
     protected id : string;          //AppID for Mendix SDK
@@ -89,7 +83,7 @@ class MxAProject {
             outputobjects = outputobjects.sort(qrysortcolumns);
 
             //Return As Output Type
-            outputobjects.returnResult(this.TEXTFILE,this.target)
+            outputobjects.returnResult(qryresulttype,this.target)
 
             console.log("Im Done!!!");
         });
@@ -128,5 +122,19 @@ export class MxAToTextFile extends MxAProject {
         super.getDocsFromProject(propertys, filterTypes, filterValues, sortcolumn, MxAProject.TEXTFILE);
     }
 
+}
+
+//Mendix Analytics Project with XMLFile as ResultType
+export class MxAToXMLFile extends MxAProject {
+    
+    public constructor(username : string, apikey : string, appid : string, xmlfile : string) {
+        super(username, apikey, appid);
+        this.target = xmlfile;
+    }
+    
+    public getDocumentsFromProject(propertys : string[], filterTypes : string[], filterValues : string[], sortcolumn : string[]) {
+        super.getDocsFromProject(propertys, filterTypes, filterValues, sortcolumn, MxAProject.XML);
+    }
+    
 }
 

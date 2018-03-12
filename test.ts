@@ -1,6 +1,8 @@
 import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwidgets, projects, documenttemplates} from "mendixmodelsdk";
 import {MendixSdkClient, Project, OnlineWorkingCopy, loadAsPromise} from "mendixplatformsdk";
 import when = require("when");
+import XMLWriter = require('xml-writer');
+import fs = require("fs-extra");
 import * as MxAO from "./MxAOutputObject";
 import * as MxAA from "./MxAObjectAdapter";
 import * as mendixanalytics from "./MxA";
@@ -14,6 +16,7 @@ let projectId = `01bfc705-81e4-4ffa-8bc9-0c43e7f2b5ba`;
 
 
 let project = new mendixanalytics.MxAToTextFile(username, apikey, projectId, "./Test.txt");
+//let project = new mendixanalytics.MxAToXMLFile(username, apikey, projectId, "./Test.xml");
 //project.getDocumentsFromProject([qrycons.propertys.ALL], [], [], [1]); //All Propertys unfiltered
 project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME, qrycons.propertys.TYPE, qrycons.propertys.CONTAINER], [], [], [qrycons.sorting.TYPE,qrycons.sorting.NAME]);  //unfiltered Result with sorting
 //project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME,qrycons.propertys.TYPE], [qrycons.filter.TYPE,qrycons.filter.NAME], ["Microflow","Testapp"], []); //filtered Result
@@ -112,3 +115,24 @@ var sortedobjects = objects.sort([qrycons.sorting.TYPE,qrycons.sorting.NAME]);
 console.log("NachSort\n");
 console.log(sortedobjects.toTextFileString());
 console.log("NachSort\n");*/
+
+//XMLWRITER TEST
+
+/*
+var xml = new XMLWriter();
+
+xml.startDocument();
+xml.startElement("MxAObject");
+xml.startElement("ID");
+xml.text("idvalue");
+xml.endElement();
+xml.startElement("Name");
+xml.text("Namevalue");
+xml.endElement();
+xml.startElement("Type");
+xml.text("Typevalue");
+xml.endElement();
+xml.endElement();
+xml.endDocument();
+
+fs.outputFile("Test.xml",xml.toString());*/
