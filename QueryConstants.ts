@@ -6,6 +6,7 @@ export namespace documents {
         export const TYPE : string = "Type";
         export const CONTAINER : string = "Container";
         export const DOCUMENTATION : string = "Documentation";
+        export const ALL : string = "All";
         //export const CALLLOCATIONS : String = "CALLLOCATIONS";
         //export const CALLCOUNT : string = "CALLCOUNT"; 
     }

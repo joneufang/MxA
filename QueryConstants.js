@@ -9,6 +9,7 @@ var documents;
         propertys.TYPE = "Type";
         propertys.CONTAINER = "Container";
         propertys.DOCUMENTATION = "Documentation";
+        propertys.ALL = "All";
         //export const CALLLOCATIONS : String = "CALLLOCATIONS";
         //export const CALLCOUNT : string = "CALLCOUNT"; 
     })(propertys = documents.propertys || (documents.propertys = {}));

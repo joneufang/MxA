@@ -77,33 +77,43 @@ export class MxADocumentAdapter extends MxAObjectAdapter {
 
     public getPropertys(document : projects.Document, qrypropertys : string[]) : MxAO.MxAOutputObjectProperty[] {
         var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
-
-        qrypropertys.forEach((qryprop) => {
-            if(qryprop == qrycons.documents.propertys.ID)
-            {
-                propertys[propertys.length] = this.getId(document);
-            }
-            else if(qryprop == qrycons.documents.propertys.NAME)
-            {
-                propertys[propertys.length] = this.getName(document);
-            }
-            else if(qryprop == qrycons.documents.propertys.TYPE)
-            {
-                propertys[propertys.length] = this.getType(document);
-            }
-            else if(qryprop == qrycons.documents.propertys.CONTAINER)
-            {
-                propertys[propertys.length] = this.getContainer(document);
-            }
-            else if(qryprop == qrycons.documents.propertys.DOCUMENTATION)
-            {
-                propertys[propertys.length] = this.getDocumentation(document);
-            }
-            else
-            {
-                propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Unknown Property","Value of Unknown Property");
-            }
-        })
+        if(qrypropertys[0] == qrycons.documents.propertys.ALL)
+        {
+            propertys[propertys.length] = this.getId(document);
+            propertys[propertys.length] = this.getName(document);
+            propertys[propertys.length] = this.getType(document);
+            propertys[propertys.length] = this.getContainer(document);
+            propertys[propertys.length] = this.getDocumentation(document);
+        }
+        else
+        {
+            qrypropertys.forEach((qryprop) => {
+                if(qryprop == qrycons.documents.propertys.ID)
+                {
+                    propertys[propertys.length] = this.getId(document);
+                }
+                else if(qryprop == qrycons.documents.propertys.NAME)
+                {
+                    propertys[propertys.length] = this.getName(document);
+                }
+                else if(qryprop == qrycons.documents.propertys.TYPE)
+                {
+                    propertys[propertys.length] = this.getType(document);
+                }
+                else if(qryprop == qrycons.documents.propertys.CONTAINER)
+                {
+                    propertys[propertys.length] = this.getContainer(document);
+                }
+                else if(qryprop == qrycons.documents.propertys.DOCUMENTATION)
+                {
+                    propertys[propertys.length] = this.getDocumentation(document);
+                }
+                else
+                {
+                    propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Unknown Property","Value of Unknown Property");
+                }
+            })
+        }
         return propertys;
     }
 
@@ -118,7 +128,7 @@ export class MxADocumentAdapter extends MxAObjectAdapter {
     protected getDocumentation(document : projects.Document) : MxAO.MxAOutputObjectProperty {
         var property : MxAO.MxAOutputObjectProperty;
 
-        property = new MxAO.MxAOutputObjectProperty("Documentation","No Value");
+        property = new MxAO.MxAOutputObjectProperty("Documentation","No Value");    //Muss noch richtig implementiert werden aktuell überall No Value muss mit .load(callback) geladen werden.
         
         if(document.isLoaded) {
             property = new MxAO.MxAOutputObjectProperty("Documentation",document.documentation);
