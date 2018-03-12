@@ -49,6 +49,24 @@ export class MxAObjectAdapter {
 
         return property; 
     }
+
+    public filter(mxaobject : MxAO.MxAOutputObject, qryfilterTypes : string[], qryfilterValues : string[]) : boolean
+    {
+        var filtered : boolean = true;
+        var filtercount : number = 0;
+
+        qryfilterTypes.forEach((qryfilter) => {
+            var regex = qryfilterValues[filtercount];
+            var value = mxaobject.getPropertyValue(qryfilter); 
+            if(!(value.match(regex) || regex == value))
+            {
+                filtered = false;
+            }
+            filtercount++;
+        })
+
+        return filtered;
+    }
 }
 
 export class MxADocumentAdapter extends MxAObjectAdapter {

@@ -45,6 +45,19 @@ var MxAObjectAdapter = /** @class */ (function () {
         property = new MxAO.MxAOutputObjectProperty("Container", container);
         return property;
     };
+    MxAObjectAdapter.prototype.filter = function (mxaobject, qryfilterTypes, qryfilterValues) {
+        var filtered = true;
+        var filtercount = 0;
+        qryfilterTypes.forEach(function (qryfilter) {
+            var regex = qryfilterValues[filtercount];
+            var value = mxaobject.getPropertyValue(qryfilter);
+            if (!(value.match(regex) || regex == value)) {
+                filtered = false;
+            }
+            filtercount++;
+        });
+        return filtered;
+    };
     return MxAObjectAdapter;
 }());
 exports.MxAObjectAdapter = MxAObjectAdapter;
