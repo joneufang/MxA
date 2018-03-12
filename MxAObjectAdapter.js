@@ -107,9 +107,17 @@ var MxADocumentAdapter = /** @class */ (function (_super) {
     };
     MxADocumentAdapter.prototype.getDocumentation = function (document) {
         var property;
-        property = new MxAO.MxAOutputObjectProperty("Documentation", "No Value"); //Muss noch richtig implementiert werden aktuell überall No Value muss mit .load(callback) geladen werden.
+        property = new MxAO.MxAOutputObjectProperty("Documentation", "No Value loaded"); //Muss noch richtig implementiert werden aktuell überall No Value muss mit .load(callback) geladen werden.
         if (document.isLoaded) {
-            property = new MxAO.MxAOutputObjectProperty("Documentation", document.documentation);
+            var docu = document.documentation;
+            docu = docu.replace(/\r/g, "");
+            docu = docu.replace(/\n/g, "\t");
+            if (docu == "") {
+                property = new MxAO.MxAOutputObjectProperty("Documentation", "No Documentation");
+            }
+            else {
+                property = new MxAO.MxAOutputObjectProperty("Documentation", docu);
+            }
         }
         return property;
     };

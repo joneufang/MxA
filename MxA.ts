@@ -43,7 +43,12 @@ class MxAProject {
             return workingCopy.model().allDocuments();
         })
         .then((documents) => { 
-            documents.forEach((doc) => {
+            
+            return this.loadAllDocumentsAsPromise(documents);
+        })
+        .done((loadeddocs) => {
+        
+            loadeddocs.forEach((doc) => {
                 if(doc instanceof projects.Document){
                     var documentadapter : MxAA.MxADocumentAdapter = new MxAA.MxADocumentAdapter();
                     var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
@@ -64,10 +69,9 @@ class MxAProject {
                 }
                 
             });
-            return this.loadAllDocumentsAsPromise(documents);
-        })
-        .done(() => {
-        
+
+
+            //Auslagern !!!!!!!!!!
             console.log("Im Done!!!");
             if(qryresultType == MxAProject.TEXTFILE)
             {

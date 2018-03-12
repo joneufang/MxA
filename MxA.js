@@ -31,7 +31,10 @@ var MxAProject = /** @class */ (function () {
             return workingCopy.model().allDocuments();
         })
             .then(function (documents) {
-            documents.forEach(function (doc) {
+            return _this.loadAllDocumentsAsPromise(documents);
+        })
+            .done(function (loadeddocs) {
+            loadeddocs.forEach(function (doc) {
                 if (doc instanceof mendixmodelsdk_1.projects.Document) {
                     var documentadapter = new MxAA.MxADocumentAdapter();
                     var propertys = new Array();
@@ -46,9 +49,7 @@ var MxAProject = /** @class */ (function () {
                     console.log("Got Document which is not instance of projects.Document");
                 }
             });
-            return _this.loadAllDocumentsAsPromise(documents);
-        })
-            .done(function () {
+            //Auslagern !!!!!!!!!!
             console.log("Im Done!!!");
             if (qryresultType == MxAProject.TEXTFILE) {
                 fs.outputFile(_this.file, result.toTextFileString());

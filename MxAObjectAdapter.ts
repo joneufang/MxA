@@ -83,7 +83,7 @@ export class MxADocumentAdapter extends MxAObjectAdapter {
             propertys[propertys.length] = this.getName(document);
             propertys[propertys.length] = this.getType(document);
             propertys[propertys.length] = this.getContainer(document);
-            propertys[propertys.length] = this.getDocumentation(document);
+            propertys[propertys.length] = this.getDocumentation(document);   
         }
         else
         {
@@ -128,10 +128,20 @@ export class MxADocumentAdapter extends MxAObjectAdapter {
     protected getDocumentation(document : projects.Document) : MxAO.MxAOutputObjectProperty {
         var property : MxAO.MxAOutputObjectProperty;
 
-        property = new MxAO.MxAOutputObjectProperty("Documentation","No Value");    //Muss noch richtig implementiert werden aktuell überall No Value muss mit .load(callback) geladen werden.
+        property = new MxAO.MxAOutputObjectProperty("Documentation","No Value loaded");    //Muss noch richtig implementiert werden aktuell überall No Value muss mit .load(callback) geladen werden.
         
         if(document.isLoaded) {
-            property = new MxAO.MxAOutputObjectProperty("Documentation",document.documentation);
+            var docu = document.documentation;
+            docu = docu.replace(/\r/g, "");
+            docu = docu.replace(/\n/g, "\t");
+            if(docu == "")
+            {
+                property = new MxAO.MxAOutputObjectProperty("Documentation","No Documentation");
+            }
+            else
+            {
+                property = new MxAO.MxAOutputObjectProperty("Documentation",docu);
+            }
         }
         
         return property;
