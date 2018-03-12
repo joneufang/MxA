@@ -47,8 +47,6 @@ class MxAProject {
                 if(doc instanceof projects.Document){
                     var documentadapter : MxAA.MxADocumentAdapter = new MxAA.MxADocumentAdapter();
                     var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
-                    var filtered : boolean = false;
-                    var filtercount : number = 0;
                     var mxaobj : MxAO.MxAOutputObject;
     
                     propertys = documentadapter.getPropertys(doc, qrypropertys);

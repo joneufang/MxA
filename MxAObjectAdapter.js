@@ -82,6 +82,9 @@ var MxADocumentAdapter = /** @class */ (function (_super) {
             else if (qryprop == qrycons.documents.propertys.CONTAINER) {
                 propertys[propertys.length] = _this.getContainer(document);
             }
+            else if (qryprop == qrycons.documents.propertys.DOCUMENTATION) {
+                propertys[propertys.length] = _this.getDocumentation(document);
+            }
             else {
                 propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Unknown Property", "Value of Unknown Property");
             }
@@ -91,6 +94,14 @@ var MxADocumentAdapter = /** @class */ (function (_super) {
     MxADocumentAdapter.prototype.getName = function (document) {
         var property;
         property = new MxAO.MxAOutputObjectProperty("Name", document.qualifiedName);
+        return property;
+    };
+    MxADocumentAdapter.prototype.getDocumentation = function (document) {
+        var property;
+        property = new MxAO.MxAOutputObjectProperty("Documentation", "No Value");
+        if (document.isLoaded) {
+            property = new MxAO.MxAOutputObjectProperty("Documentation", document.documentation);
+        }
         return property;
     };
     return MxADocumentAdapter;

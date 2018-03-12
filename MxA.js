@@ -35,8 +35,6 @@ var MxAProject = /** @class */ (function () {
                 if (doc instanceof mendixmodelsdk_1.projects.Document) {
                     var documentadapter = new MxAA.MxADocumentAdapter();
                     var propertys = new Array();
-                    var filtered = false;
-                    var filtercount = 0;
                     var mxaobj;
                     propertys = documentadapter.getPropertys(doc, qrypropertys);
                     mxaobj = new MxAO.MxAOutputObject(propertys);

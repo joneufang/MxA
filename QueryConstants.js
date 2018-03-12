@@ -8,13 +8,15 @@ var documents;
         propertys.NAME = "Name";
         propertys.TYPE = "Type";
         propertys.CONTAINER = "Container";
-        propertys.CALLLOCATIONS = "CALLLOCATIONS";
-        propertys.CALLCOUNT = "CALLCOUNT";
+        propertys.DOCUMENTATION = "Documentation";
+        //export const CALLLOCATIONS : String = "CALLLOCATIONS";
+        //export const CALLCOUNT : string = "CALLCOUNT"; 
     })(propertys = documents.propertys || (documents.propertys = {}));
     var filter;
     (function (filter) {
         filter.ID = "Id";
         filter.NAME = "Name";
         filter.TYPE = "Type";
+        filter.CONTAINER = "Container";
     })(filter = documents.filter || (documents.filter = {}));
 })(documents = exports.documents || (exports.documents = {}));

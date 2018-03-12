@@ -95,6 +95,10 @@ export class MxADocumentAdapter extends MxAObjectAdapter {
             {
                 propertys[propertys.length] = this.getContainer(document);
             }
+            else if(qryprop == qrycons.documents.propertys.DOCUMENTATION)
+            {
+                propertys[propertys.length] = this.getDocumentation(document);
+            }
             else
             {
                 propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Unknown Property","Value of Unknown Property");
@@ -107,6 +111,18 @@ export class MxADocumentAdapter extends MxAObjectAdapter {
         var property : MxAO.MxAOutputObjectProperty;
         
         property = new MxAO.MxAOutputObjectProperty("Name",document.qualifiedName);
+        
+        return property;
+    }
+
+    protected getDocumentation(document : projects.Document) : MxAO.MxAOutputObjectProperty {
+        var property : MxAO.MxAOutputObjectProperty;
+
+        property = new MxAO.MxAOutputObjectProperty("Documentation","No Value");
+        
+        if(document.isLoaded) {
+            property = new MxAO.MxAOutputObjectProperty("Documentation",document.documentation);
+        }
         
         return property;
     }
