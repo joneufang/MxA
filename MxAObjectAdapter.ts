@@ -4,6 +4,10 @@ import * as qrycons from "./QueryConstants";
 
 export class MxAObjectAdapter {
 
+    constructor() {
+
+    }
+
     protected getId(object : AbstractElement) : MxAO.MxAOutputObjectProperty {
         var property : MxAO.MxAOutputObjectProperty;
 
@@ -49,8 +53,10 @@ export class MxAObjectAdapter {
 
 export class MxADocumentAdapter extends MxAObjectAdapter {
     
-    protected name : string;
-    
+    constructor() {
+        super();   
+    }
+
     public getPropertys(document : projects.Document, qrypropertys : string[]) : MxAO.MxAOutputObjectProperty[] {
         var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
 

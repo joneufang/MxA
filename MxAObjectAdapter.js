@@ -51,7 +51,7 @@ exports.MxAObjectAdapter = MxAObjectAdapter;
 var MxADocumentAdapter = /** @class */ (function (_super) {
     __extends(MxADocumentAdapter, _super);
     function MxADocumentAdapter() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        return _super.call(this) || this;
     }
     MxADocumentAdapter.prototype.getPropertys = function (document, qrypropertys) {
         var _this = this;

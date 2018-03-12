@@ -3,6 +3,7 @@ import {MendixSdkClient, Project, OnlineWorkingCopy, loadAsPromise} from "mendix
 import when = require("when");
 import fs = require("fs-extra");
 import * as MxAO from "./MxAOutputObject";
+import * as MxAA from "./MxAObjectAdapter";
 import * as qrycons from "./QueryConstants";
 
 
@@ -43,66 +44,38 @@ class MxAProject {
         })
         .then((documents) => { 
             documents.forEach((doc) => {
-                var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
-                var filtered : boolean = false;
-                var filtercount : number = 0;
-                var mxaobj : MxAO.MxAOutputObject;
-                qrypropertys.forEach((qryprop) => {
-                    if(qryprop == qrycons.documents.propertys.ID)
-                    {
-                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("ID",doc.id);
-                    }
-                    else if(qryprop == qrycons.documents.propertys.NAME)
-                    {
-                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Name",doc.qualifiedName);
-                    }
-                    else if(qryprop == qrycons.documents.propertys.TYPE)
-                    {
-                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Type",doc.structureTypeName);
-                    }
-                    else if(qryprop == qrycons.documents.propertys.CONTAINER)
-                    {
-                        var container = "Kein Container"
-                        try{
-                            var fbase = doc.containerAsFolderBase;
-                            if(fbase instanceof projects.Folder)
-                            {
-                                var folder : projects.Folder = fbase;
-                                container = folder.name;
-                            }
-                            else if(fbase instanceof projects.Module)
-                            {
-                                var modul : projects.Module = fbase;
-                                container = modul.name;
-                            }
-                        }
-                        catch
-                        {
+                if(doc instanceof projects.Document){
+                    var documentadapter : MxAA.MxADocumentAdapter = new MxAA.MxADocumentAdapter();
+                    var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
+                    var filtered : boolean = false;
+                    var filtercount : number = 0;
+                    var mxaobj : MxAO.MxAOutputObject;
+    
+                    propertys = documentadapter.getPropertys(doc, qrypropertys);
+    
+                    mxaobj = new MxAO.MxAOutputObject(propertys);
 
+                    qryfilterTypes.forEach((qryfilter) => {
+                        var regex = qryfilterValues[filtercount];
+                        var value = mxaobj.getPropertyValue(qryfilter); 
+                        if(!(value.match(regex) || regex == value))
+                        {
+                            filtered = true;
                         }
-                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Container",container);
-                    }
-                    else
+                        filtercount++;
+                    })
+                    if(!filtered)
                     {
-                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Unknown Property","Value of Unknown Property");
+                        result.addObject(mxaobj);
                     }
-                })
-                mxaobj = new MxAO.MxAOutputObject(propertys);
-                qryfilterTypes.forEach((qryfilter) => {
-                    var regex = qryfilterValues[filtercount];
-                    var value = mxaobj.getPropertyValue(qryfilter); 
-                    if(!(value.match(regex) || regex == value))
-                    {
-                        filtered = true;
-                    }
-                    filtercount++;
-                })
-                if(!filtered)
-                {
-                    result.addObject(mxaobj);
                 }
+                else
+                {
+                    console.log("Got Document which is not instance of projects.Document");
+                }
+                
             });
-            return loadAllDocumentsAsPromise(documents);
+            return this.loadAllDocumentsAsPromise(documents);
         })
         .done(() => {
         
@@ -121,6 +94,9 @@ class MxAProject {
 
     }
 
+    protected loadAllDocumentsAsPromise(documents: projects.IDocument[]): when.Promise<projects.Document[]> {
+        return when.all<projects.Document[]>(documents.map( doc => loadAsPromise(doc)));
+    }
     
 }    
 
@@ -153,6 +129,3 @@ export class MxAToTextFile extends MxAProject {
 
 }
 
-function loadAllDocumentsAsPromise(documents: projects.IDocument[]): when.Promise<projects.Document[]> {
-    return when.all<projects.Document[]>(documents.map( doc => loadAsPromise(doc)));
-}

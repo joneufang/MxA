@@ -15,7 +15,7 @@ var mendixplatformsdk_1 = require("mendixplatformsdk");
 var when = require("when");
 var fs = require("fs-extra");
 var MxAO = require("./MxAOutputObject");
-var qrycons = require("./QueryConstants");
+var MxAA = require("./MxAObjectAdapter");
 var MxAProject = /** @class */ (function () {
     function MxAProject(username, apikey, appid) {
         this.name = username;
@@ -32,55 +32,31 @@ var MxAProject = /** @class */ (function () {
         })
             .then(function (documents) {
             documents.forEach(function (doc) {
-                var propertys = new Array();
-                var filtered = false;
-                var filtercount = 0;
-                var mxaobj;
-                qrypropertys.forEach(function (qryprop) {
-                    if (qryprop == qrycons.documents.propertys.ID) {
-                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("ID", doc.id);
-                    }
-                    else if (qryprop == qrycons.documents.propertys.NAME) {
-                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Name", doc.qualifiedName);
-                    }
-                    else if (qryprop == qrycons.documents.propertys.TYPE) {
-                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Type", doc.structureTypeName);
-                    }
-                    else if (qryprop == qrycons.documents.propertys.CONTAINER) {
-                        var container = "Kein Container";
-                        try {
-                            var fbase = doc.containerAsFolderBase;
-                            if (fbase instanceof mendixmodelsdk_1.projects.Folder) {
-                                var folder = fbase;
-                                container = folder.name;
-                            }
-                            else if (fbase instanceof mendixmodelsdk_1.projects.Module) {
-                                var modul = fbase;
-                                container = modul.name;
-                            }
+                if (doc instanceof mendixmodelsdk_1.projects.Document) {
+                    var documentadapter = new MxAA.MxADocumentAdapter();
+                    var propertys = new Array();
+                    var filtered = false;
+                    var filtercount = 0;
+                    var mxaobj;
+                    propertys = documentadapter.getPropertys(doc, qrypropertys);
+                    mxaobj = new MxAO.MxAOutputObject(propertys);
+                    qryfilterTypes.forEach(function (qryfilter) {
+                        var regex = qryfilterValues[filtercount];
+                        var value = mxaobj.getPropertyValue(qryfilter);
+                        if (!(value.match(regex) || regex == value)) {
+                            filtered = true;
                         }
-                        catch (_a) {
-                        }
-                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Container", container);
+                        filtercount++;
+                    });
+                    if (!filtered) {
+                        result.addObject(mxaobj);
                     }
-                    else {
-                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Unknown Property", "Value of Unknown Property");
-                    }
-                });
-                mxaobj = new MxAO.MxAOutputObject(propertys);
-                qryfilterTypes.forEach(function (qryfilter) {
-                    var regex = qryfilterValues[filtercount];
-                    var value = mxaobj.getPropertyValue(qryfilter);
-                    if (!(value.match(regex) || regex == value)) {
-                        filtered = true;
-                    }
-                    filtercount++;
-                });
-                if (!filtered) {
-                    result.addObject(mxaobj);
+                }
+                else {
+                    console.log("Got Document which is not instance of projects.Document");
                 }
             });
-            return loadAllDocumentsAsPromise(documents);
+            return _this.loadAllDocumentsAsPromise(documents);
         })
             .done(function () {
             console.log("Im Done!!!");
@@ -91,6 +67,9 @@ var MxAProject = /** @class */ (function () {
                 console.log("Wrong ResultType");
             }
         });
+    };
+    MxAProject.prototype.loadAllDocumentsAsPromise = function (documents) {
+        return when.all(documents.map(function (doc) { return mendixplatformsdk_1.loadAsPromise(doc); }));
     };
     MxAProject.TEXTFILE = "TEXTFILE";
     MxAProject.HTMLTABLE = "HTMLTABLE";
@@ -127,6 +106,3 @@ var MxAToTextFile = /** @class */ (function (_super) {
     return MxAToTextFile;
 }(MxAProject));
 exports.MxAToTextFile = MxAToTextFile;
-function loadAllDocumentsAsPromise(documents) {
-    return when.all(documents.map(function (doc) { return mendixplatformsdk_1.loadAsPromise(doc); }));
-}
