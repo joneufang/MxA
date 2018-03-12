@@ -12,6 +12,7 @@ var MxAOutputObjectList = /** @class */ (function () {
     };
     //Sorts all Objects in Container in column order given
     MxAOutputObjectList.prototype.sort = function (sortcolumns) {
+        //console.log("Sort got " + sortcolumns);
         var sortingscount = sortcolumns.length;
         for (var i = (sortingscount - 1); i >= 0; i--) {
             var column = sortcolumns[i];
@@ -21,12 +22,15 @@ var MxAOutputObjectList = /** @class */ (function () {
         return this;
     };
     MxAOutputObjectList.prototype.sortColumn = function (column) {
-        for (var i = 1; i < this.objects.length; i++) {
-            for (var j = this.objects.length; j < 1; j--) {
-                if (parseInt(this.objects[i - 1].getPropertyValue(column)) < parseInt(this.objects[i].getPropertyValue(column))) {
-                    var temp = this.objects[i - 1];
-                    this.objects[i - 1] = this.objects[i];
-                    this.objects[i] = temp;
+        //console.log("Sort Columns got " + column);
+        for (var i = 0; i < this.objects.length; i++) {
+            //console.log(this.objects[i].getPropertyValue(column));
+            for (var j = 1; j < this.objects.length; j++) {
+                if (this.objects[j - 1].getPropertyValue(column) > this.objects[j].getPropertyValue(column)) {
+                    //Tausch
+                    var temp = this.objects[j];
+                    this.objects[j] = this.objects[j - 1];
+                    this.objects[j - 1] = temp;
                 }
             }
         }
@@ -72,12 +76,6 @@ var MxAOutputObject = /** @class */ (function () {
                 value = prop.toString();
             }
         });
-        return value;
-    };
-    //Get Value of given column
-    MxAOutputObject.prototype.getColumnValue = function (columnnumber) {
-        var value = "Property not found";
-        value = this.propertys[columnnumber - 1].toString();
         return value;
     };
     //Serialize ObjectData
