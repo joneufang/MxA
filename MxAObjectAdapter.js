@@ -13,19 +13,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mendixmodelsdk_1 = require("mendixmodelsdk");
 var MxAO = require("./MxAOutputObject");
 var qrycons = require("./QueryConstants");
+//Adapter to get propertys and filter Mendix Objects
 var MxAObjectAdapter = /** @class */ (function () {
     function MxAObjectAdapter() {
     }
+    //Get Id of Mendix Object
     MxAObjectAdapter.prototype.getId = function (object) {
         var property;
         property = new MxAO.MxAOutputObjectProperty("ID", object.id);
         return property;
     };
+    //Get Type of Mendix Object
     MxAObjectAdapter.prototype.getType = function (object) {
         var property;
         property = new MxAO.MxAOutputObjectProperty("Type", object.structureTypeName);
         return property;
     };
+    //Get Container of Mendix Object
     MxAObjectAdapter.prototype.getContainer = function (object) {
         var property;
         var container = "Kein Container";
@@ -45,6 +49,8 @@ var MxAObjectAdapter = /** @class */ (function () {
         property = new MxAO.MxAOutputObjectProperty("Container", container);
         return property;
     };
+    //Filters Output Object
+    //Returns true if Object passes all filters
     MxAObjectAdapter.prototype.filter = function (mxaobject, qryfilterTypes, qryfilterValues) {
         var filtered = true;
         var filtercount = 0;
@@ -61,11 +67,14 @@ var MxAObjectAdapter = /** @class */ (function () {
     return MxAObjectAdapter;
 }());
 exports.MxAObjectAdapter = MxAObjectAdapter;
+//Adapter to get propertys of Mendix Documents
 var MxADocumentAdapter = /** @class */ (function (_super) {
     __extends(MxADocumentAdapter, _super);
     function MxADocumentAdapter() {
         return _super.call(this) || this;
     }
+    //Gets all wanted propertys from a Mendix Document
+    //Returns Array of Output Object Properties
     MxADocumentAdapter.prototype.getPropertys = function (document, qrypropertys) {
         var _this = this;
         var propertys = new Array();
@@ -100,11 +109,13 @@ var MxADocumentAdapter = /** @class */ (function (_super) {
         }
         return propertys;
     };
+    //gets Name of a Mendix Document
     MxADocumentAdapter.prototype.getName = function (document) {
         var property;
         property = new MxAO.MxAOutputObjectProperty("Name", document.qualifiedName);
         return property;
     };
+    //gets Documentation of a Mendix Document
     MxADocumentAdapter.prototype.getDocumentation = function (document) {
         var property;
         property = new MxAO.MxAOutputObjectProperty("Documentation", "No Value loaded"); //Muss noch richtig implementiert werden aktuell überall No Value muss mit .load(callback) geladen werden.

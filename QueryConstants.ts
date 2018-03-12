@@ -1,3 +1,4 @@
+//All Constants for Propertys and Filter
 
 export namespace documents {
     export namespace propertys {

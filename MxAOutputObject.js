@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-//ClassContainer for a List of MendixObjects
+//ClassContainer for a List of OutputObjects
 var MxAOutputObjectList = /** @class */ (function () {
     function MxAOutputObjectList() {
-        this.propertylength = 20;
+        this.propertylength = 20; //Length of columns for TextFile Output
         this.objects = new Array();
     }
     //Add Object to Container
@@ -43,6 +43,7 @@ var MxAOutputObject = /** @class */ (function () {
         var prop = new MxAOutputObjectProperty(name, value);
         this.propertys[this.propertys.length] = prop;
     };
+    //Get Value of given property
     MxAOutputObject.prototype.getPropertyValue = function (name) {
         var value = "Property not found";
         this.propertys.forEach(function (prop) {
@@ -60,6 +61,7 @@ var MxAOutputObject = /** @class */ (function () {
         });
         return result;
     };
+    //Serialize ObjectData with Column length size for TextFile Output
     MxAOutputObject.prototype.toStringNormalized = function (size) {
         var result = "";
         this.propertys.forEach(function (prop) {
@@ -80,6 +82,7 @@ var MxAOutputObject = /** @class */ (function () {
         });
         return result;
     };
+    //Serialize Object Property Names with Column length size for TextFile Output
     MxAOutputObject.prototype.getHeaderNormalized = function (size) {
         var result = "";
         this.propertys.forEach(function (prop) {
@@ -92,6 +95,7 @@ var MxAOutputObject = /** @class */ (function () {
         });
         return result;
     };
+    //gets Length of the longest property in the Object
     MxAOutputObject.prototype.getLongestPropertySize = function () {
         var size = 0;
         this.propertys.forEach(function (prop) {

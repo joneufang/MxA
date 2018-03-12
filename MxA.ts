@@ -6,27 +6,28 @@ import * as MxAO from "./MxAOutputObject";
 import * as MxAA from "./MxAObjectAdapter";
 import * as qrycons from "./QueryConstants";
 
-
+//Mendix Analytics Project without specified Output Type
 class MxAProject {
 
-    protected static readonly TEXTFILE = "TEXTFILE";
+    //Constants to define output target
+    protected static readonly TEXTFILE = "TEXTFILE";            
     protected static readonly HTMLTABLE = "HTMLTABLE";
     protected static readonly XML = "XML";
     protected static readonly JSON = "JSON";
 
-    protected name : string;
-    protected key : string;
-    protected id : string;
+    protected name : string;        //username for Mendix SDK
+    protected key : string;         //API-Key for Mendix SDK
+    protected id : string;          //AppID for Mendix SDK
 
-    protected file : string;
-    protected htmlresult;
-    protected htmlerror;
+    protected file : string;        //Output: Textfile
+    protected htmlresult : string;  //Output: Name of HTMLElement for Result
+    protected htmlerror : string;   //Output: Name of HTMLElement for Errors
 
-    protected client : MendixSdkClient;
-    protected project : Project;
+    protected client : MendixSdkClient;     //Mendix SDK client
+    protected project : Project;            //Mendix SDK Project
 
     
-
+    //Standard Constructor creates Mendix SDK Client and Project
     protected constructor(username : string, apikey : string, appid: string) {
         this.name = username;
         this.key = apikey;
@@ -36,7 +37,15 @@ class MxAProject {
         this.project = new Project(this.client, this.id, "");
     }
 
-    protected getDocsFromProject(qrypropertys : string[], qryfilterTypes : string[], qryfilterValues : string[], qrysortcolumn : number[], qryresultType : string) {
+    /*
+    Gets Documents from whole Project
+    Parameter: qrypropertys : string[]      Array of property constants of wanted propertys
+    Parameter: qryfiltertypes : string[]    Array of filter constants of propertys to filter
+    Parameter: qryfiltervalues : string[]   Array of Values for the filters
+    Parameter: qrysortcolumns : number[]    Array of Columnnumbers for sorting
+    Parameter: qryresulttype : string       Constant which ResultType should be used
+    */
+    protected getDocsFromProject(qrypropertys : string[], qryfiltertypes : string[], qryfiltervalues : string[], qrysortcolumns : number[], qryresulttype : string) {
         var result : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
         
         this.project.createWorkingCopy().then((workingCopy) => {
@@ -58,7 +67,7 @@ class MxAProject {
     
                     mxaobj = new MxAO.MxAOutputObject(propertys);
 
-                    if(documentadapter.filter(mxaobj,qryfilterTypes, qryfilterValues))
+                    if(documentadapter.filter(mxaobj,qryfiltertypes, qryfiltervalues))
                     {
                         result.addObject(mxaobj);
                     }
@@ -73,7 +82,7 @@ class MxAProject {
 
             //Auslagern !!!!!!!!!!
             console.log("Im Done!!!");
-            if(qryresultType == MxAProject.TEXTFILE)
+            if(qryresulttype == MxAProject.TEXTFILE)
             {
                 fs.outputFile(this.file, result.toTextFileString());
             }
@@ -93,6 +102,7 @@ class MxAProject {
     
 }    
 
+//Mendix Analytics Project with HTMLElement as ResultType
 export class MxAToHtmlTable extends MxAProject {
 
     public constructor(username : string, apikey : string, appid : string, htmlresultfield : string, htmlerrorfield? : string) {
@@ -109,6 +119,7 @@ export class MxAToHtmlTable extends MxAProject {
     
 }
 
+//Mendix Analytics Project with TextFile as ResultType
 export class MxAToTextFile extends MxAProject {
 
     public constructor(username : string, apikey : string, appid : string, textfile : string) {

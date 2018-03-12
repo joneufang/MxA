@@ -16,7 +16,9 @@ var when = require("when");
 var fs = require("fs-extra");
 var MxAO = require("./MxAOutputObject");
 var MxAA = require("./MxAObjectAdapter");
+//Mendix Analytics Project without specified Output Type
 var MxAProject = /** @class */ (function () {
+    //Standard Constructor creates Mendix SDK Client and Project
     function MxAProject(username, apikey, appid) {
         this.name = username;
         this.key = apikey;
@@ -24,7 +26,15 @@ var MxAProject = /** @class */ (function () {
         this.client = new mendixplatformsdk_1.MendixSdkClient(this.name, this.key);
         this.project = new mendixplatformsdk_1.Project(this.client, this.id, "");
     }
-    MxAProject.prototype.getDocsFromProject = function (qrypropertys, qryfilterTypes, qryfilterValues, qrysortcolumn, qryresultType) {
+    /*
+    Gets Documents from whole Project
+    Parameter: qrypropertys : string[]      Array of property constants of wanted propertys
+    Parameter: qryfiltertypes : string[]    Array of filter constants of propertys to filter
+    Parameter: qryfiltervalues : string[]   Array of Values for the filters
+    Parameter: qrysortcolumns : number[]    Array of Columnnumbers for sorting
+    Parameter: qryresulttype : string       Constant which ResultType should be used
+    */
+    MxAProject.prototype.getDocsFromProject = function (qrypropertys, qryfiltertypes, qryfiltervalues, qrysortcolumns, qryresulttype) {
         var _this = this;
         var result = new MxAO.MxAOutputObjectList();
         this.project.createWorkingCopy().then(function (workingCopy) {
@@ -41,7 +51,7 @@ var MxAProject = /** @class */ (function () {
                     var mxaobj;
                     propertys = documentadapter.getPropertys(doc, qrypropertys);
                     mxaobj = new MxAO.MxAOutputObject(propertys);
-                    if (documentadapter.filter(mxaobj, qryfilterTypes, qryfilterValues)) {
+                    if (documentadapter.filter(mxaobj, qryfiltertypes, qryfiltervalues)) {
                         result.addObject(mxaobj);
                     }
                 }
@@ -51,7 +61,7 @@ var MxAProject = /** @class */ (function () {
             });
             //Auslagern !!!!!!!!!!
             console.log("Im Done!!!");
-            if (qryresultType == MxAProject.TEXTFILE) {
+            if (qryresulttype == MxAProject.TEXTFILE) {
                 fs.outputFile(_this.file, result.toTextFileString());
             }
             else {
@@ -62,12 +72,14 @@ var MxAProject = /** @class */ (function () {
     MxAProject.prototype.loadAllDocumentsAsPromise = function (documents) {
         return when.all(documents.map(function (doc) { return mendixplatformsdk_1.loadAsPromise(doc); }));
     };
+    //Constants to define output target
     MxAProject.TEXTFILE = "TEXTFILE";
     MxAProject.HTMLTABLE = "HTMLTABLE";
     MxAProject.XML = "XML";
     MxAProject.JSON = "JSON";
     return MxAProject;
 }());
+//Mendix Analytics Project with HTMLElement as ResultType
 var MxAToHtmlTable = /** @class */ (function (_super) {
     __extends(MxAToHtmlTable, _super);
     function MxAToHtmlTable(username, apikey, appid, htmlresultfield, htmlerrorfield) {
@@ -84,6 +96,7 @@ var MxAToHtmlTable = /** @class */ (function (_super) {
     return MxAToHtmlTable;
 }(MxAProject));
 exports.MxAToHtmlTable = MxAToHtmlTable;
+//Mendix Analytics Project with TextFile as ResultType
 var MxAToTextFile = /** @class */ (function (_super) {
     __extends(MxAToTextFile, _super);
     function MxAToTextFile(username, apikey, appid, textfile) {

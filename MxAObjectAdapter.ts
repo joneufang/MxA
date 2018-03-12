@@ -2,12 +2,14 @@ import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwi
 import * as MxAO from "./MxAOutputObject";
 import * as qrycons from "./QueryConstants";
 
+//Adapter to get propertys and filter Mendix Objects
 export class MxAObjectAdapter {
 
     constructor() {
 
     }
 
+    //Get Id of Mendix Object
     protected getId(object : AbstractElement) : MxAO.MxAOutputObjectProperty {
         var property : MxAO.MxAOutputObjectProperty;
 
@@ -16,6 +18,7 @@ export class MxAObjectAdapter {
         return property; 
     }
 
+    //Get Type of Mendix Object
     protected getType(object : AbstractElement) : MxAO.MxAOutputObjectProperty {
         var property : MxAO.MxAOutputObjectProperty;
 
@@ -24,6 +27,7 @@ export class MxAObjectAdapter {
         return property; 
     }
 
+    //Get Container of Mendix Object
     protected getContainer(object : AbstractElement) : MxAO.MxAOutputObjectProperty {
         var property : MxAO.MxAOutputObjectProperty;
         var container = "Kein Container"
@@ -50,6 +54,8 @@ export class MxAObjectAdapter {
         return property; 
     }
 
+    //Filters Output Object
+    //Returns true if Object passes all filters
     public filter(mxaobject : MxAO.MxAOutputObject, qryfilterTypes : string[], qryfilterValues : string[]) : boolean
     {
         var filtered : boolean = true;
@@ -69,12 +75,16 @@ export class MxAObjectAdapter {
     }
 }
 
+
+//Adapter to get propertys of Mendix Documents
 export class MxADocumentAdapter extends MxAObjectAdapter {
     
     constructor() {
         super();   
     }
 
+    //Gets all wanted propertys from a Mendix Document
+    //Returns Array of Output Object Properties
     public getPropertys(document : projects.Document, qrypropertys : string[]) : MxAO.MxAOutputObjectProperty[] {
         var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
         if(qrypropertys[0] == qrycons.documents.propertys.ALL)
@@ -117,6 +127,7 @@ export class MxADocumentAdapter extends MxAObjectAdapter {
         return propertys;
     }
 
+    //gets Name of a Mendix Document
     protected getName(document : projects.Document) : MxAO.MxAOutputObjectProperty {
         var property : MxAO.MxAOutputObjectProperty;
         
@@ -125,6 +136,7 @@ export class MxADocumentAdapter extends MxAObjectAdapter {
         return property;
     }
 
+    //gets Documentation of a Mendix Document
     protected getDocumentation(document : projects.Document) : MxAO.MxAOutputObjectProperty {
         var property : MxAO.MxAOutputObjectProperty;
 

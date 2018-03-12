@@ -1,8 +1,8 @@
-//ClassContainer for a List of MendixObjects
+//ClassContainer for a List of OutputObjects
 export class MxAOutputObjectList
 {
     private objects : MxAOutputObject[];      //Array of Objects
-    private propertylength : number = 20;
+    private propertylength : number = 20;       //Length of columns for TextFile Output
 
     constructor() {
         this.objects = new Array();
@@ -51,6 +51,7 @@ export class MxAOutputObject {
         this.propertys[this.propertys.length] = prop
     }
 
+    //Get Value of given property
     public getPropertyValue(name : string)
     {
         var value : string = "Property not found";
@@ -72,6 +73,7 @@ export class MxAOutputObject {
         return result;
     }
 
+    //Serialize ObjectData with Column length size for TextFile Output
     public toStringNormalized(size : number) {
         let result : string = "";
         this.propertys.forEach((prop) => {
@@ -95,6 +97,7 @@ export class MxAOutputObject {
         return result;
     }
 
+    //Serialize Object Property Names with Column length size for TextFile Output
     public getHeaderNormalized(size : number) {
         let result : string = "";
         this.propertys.forEach((prop) => {
@@ -109,6 +112,7 @@ export class MxAOutputObject {
         return result;
     }
 
+    //gets Length of the longest property in the Object
     public getLongestPropertySize() {
         var size : number = 0;
         this.propertys.forEach((prop) => {
