@@ -45,7 +45,7 @@ class MxAProject {
     Parameter: qrysortcolumns : number[]    Array of Columnnumbers for sorting
     Parameter: qryresulttype : string       Constant which ResultType should be used
     */
-    protected getDocsFromProject(qrypropertys : string[], qryfiltertypes : string[], qryfiltervalues : string[], qrysortcolumns : number[], qryresulttype : string) {
+    protected getDocsFromProject(qrypropertys : string[], qryfiltertypes : string[], qryfiltervalues : string[], qrysortcolumns : string[], qryresulttype : string) {
         var outputobjects : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
         
         this.project.createWorkingCopy().then((workingCopy) => {
@@ -114,7 +114,7 @@ export class MxAToHtmlTable extends MxAProject {
         }
     }
 
-    public getDocumentsFromProject(propertys : string[], filterTypes : string[], filterValues : string[], sortcolumn : number[]) {
+    public getDocumentsFromProject(propertys : string[], filterTypes : string[], filterValues : string[], sortcolumn : string[]) {
         super.getDocsFromProject(propertys, filterTypes, filterValues, sortcolumn, MxAProject.HTMLTABLE);
     }
     
@@ -128,7 +128,7 @@ export class MxAToTextFile extends MxAProject {
         this.file = textfile;
     }
 
-    public getDocumentsFromProject(propertys : string[], filterTypes : string[], filterValues : string[], sortcolumn : number[]) {
+    public getDocumentsFromProject(propertys : string[], filterTypes : string[], filterValues : string[], sortcolumn : string[]) {
         super.getDocsFromProject(propertys, filterTypes, filterValues, sortcolumn, MxAProject.TEXTFILE);
     }
 

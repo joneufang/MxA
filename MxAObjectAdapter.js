@@ -26,7 +26,7 @@ var MxAObjectAdapter = /** @class */ (function () {
     //Get Type of Mendix Object
     MxAObjectAdapter.prototype.getType = function (object) {
         var property;
-        property = new MxAO.MxAOutputObjectProperty("Type", object.structureTypeName);
+        property = new MxAO.MxAOutputObjectProperty("TYPE", object.structureTypeName);
         return property;
     };
     //Get Container of Mendix Object
@@ -46,7 +46,7 @@ var MxAObjectAdapter = /** @class */ (function () {
         }
         catch (_a) {
         }
-        property = new MxAO.MxAOutputObjectProperty("Container", container);
+        property = new MxAO.MxAOutputObjectProperty("CONTAINER", container);
         return property;
     };
     //Filters Output Object
@@ -112,22 +112,22 @@ var MxADocumentAdapter = /** @class */ (function (_super) {
     //gets Name of a Mendix Document
     MxADocumentAdapter.prototype.getName = function (document) {
         var property;
-        property = new MxAO.MxAOutputObjectProperty("Name", document.qualifiedName);
+        property = new MxAO.MxAOutputObjectProperty("NAME", document.qualifiedName);
         return property;
     };
     //gets Documentation of a Mendix Document
     MxADocumentAdapter.prototype.getDocumentation = function (document) {
         var property;
-        property = new MxAO.MxAOutputObjectProperty("Documentation", "No Value loaded"); //Muss noch richtig implementiert werden aktuell überall No Value muss mit .load(callback) geladen werden.
+        property = new MxAO.MxAOutputObjectProperty("DOCUMENTATION", "No Value loaded"); //Muss noch richtig implementiert werden aktuell überall No Value muss mit .load(callback) geladen werden.
         if (document.isLoaded) {
             var docu = document.documentation;
             docu = docu.replace(/\r/g, "");
             docu = docu.replace(/\n/g, "\t");
             if (docu == "") {
-                property = new MxAO.MxAOutputObjectProperty("Documentation", "No Documentation");
+                property = new MxAO.MxAOutputObjectProperty("DOCUMENTATION", "No Documentation");
             }
             else {
-                property = new MxAO.MxAOutputObjectProperty("Documentation", docu);
+                property = new MxAO.MxAOutputObjectProperty("DOCUMENTATION", docu);
             }
         }
         return property;

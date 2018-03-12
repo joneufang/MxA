@@ -2,19 +2,25 @@
 
 export namespace documents {
     export namespace propertys {
-        export const ID : string = "Id";
-        export const NAME : string = "Name";
-        export const TYPE : string = "Type";
-        export const CONTAINER : string = "Container";
-        export const DOCUMENTATION : string = "Documentation";
-        export const ALL : string = "All";
+        export const ID : string = "ID";
+        export const NAME : string = "NAME";
+        export const TYPE : string = "TYPE";
+        export const CONTAINER : string = "CONTAINER";
+        export const DOCUMENTATION : string = "DOCUMENTATION";
+        export const ALL : string = "ALL";
         //export const CALLLOCATIONS : String = "CALLLOCATIONS";
         //export const CALLCOUNT : string = "CALLCOUNT"; 
     }
     export namespace filter {
-        export const ID : string = "Id";
-        export const NAME : string = "Name";
-        export const TYPE : string = "Type";
-        export const CONTAINER : string = "Container";
+        export const ID : string = "ID";
+        export const NAME : string = "NAME";
+        export const TYPE : string = "TYPE";
+        export const CONTAINER : string = "CONTAINER";
+    }
+    export namespace sorting {
+        export const ID : string = "ID";
+        export const NAME : string = "NAME";
+        export const TYPE : string = "TYPE";
+        export const CONTAINER : string = "CONTAINER";
     }
 }
