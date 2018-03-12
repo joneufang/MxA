@@ -46,7 +46,7 @@ class MxAProject {
     Parameter: qryresulttype : string       Constant which ResultType should be used
     */
     protected getDocsFromProject(qrypropertys : string[], qryfiltertypes : string[], qryfiltervalues : string[], qrysortcolumns : number[], qryresulttype : string) {
-        var result : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
+        var outputobjects : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
         
         this.project.createWorkingCopy().then((workingCopy) => {
             return workingCopy.model().allDocuments();
@@ -69,7 +69,7 @@ class MxAProject {
 
                     if(documentadapter.filter(mxaobj,qryfiltertypes, qryfiltervalues))
                     {
-                        result.addObject(mxaobj);
+                        outputobjects.addObject(mxaobj);
                     }
                 }
                 else
@@ -79,12 +79,13 @@ class MxAProject {
                 
             });
 
+            outputobjects = outputobjects.sort(qrysortcolumns);
 
             //Auslagern !!!!!!!!!!
             console.log("Im Done!!!");
             if(qryresulttype == MxAProject.TEXTFILE)
             {
-                fs.outputFile(this.file, result.toTextFileString());
+                fs.outputFile(this.file, outputobjects.toTextFileString());
             }
             else
             {

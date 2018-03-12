@@ -13,6 +13,12 @@ export class MxAOutputObjectList
         this.objects[this.objects.length] = object;
     }
 
+    //Sorts all Objects in Container in column order given
+    public sort(sortcolumns : number[]) : MxAOutputObjectList
+    {
+        return this;
+    }
+
     //Serialize Container Objects
     public toTextFileString() {
         if(this.objects.length > 0) {

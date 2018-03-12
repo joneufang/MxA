@@ -36,7 +36,7 @@ var MxAProject = /** @class */ (function () {
     */
     MxAProject.prototype.getDocsFromProject = function (qrypropertys, qryfiltertypes, qryfiltervalues, qrysortcolumns, qryresulttype) {
         var _this = this;
-        var result = new MxAO.MxAOutputObjectList();
+        var outputobjects = new MxAO.MxAOutputObjectList();
         this.project.createWorkingCopy().then(function (workingCopy) {
             return workingCopy.model().allDocuments();
         })
@@ -52,17 +52,18 @@ var MxAProject = /** @class */ (function () {
                     propertys = documentadapter.getPropertys(doc, qrypropertys);
                     mxaobj = new MxAO.MxAOutputObject(propertys);
                     if (documentadapter.filter(mxaobj, qryfiltertypes, qryfiltervalues)) {
-                        result.addObject(mxaobj);
+                        outputobjects.addObject(mxaobj);
                     }
                 }
                 else {
                     console.log("Got Document which is not instance of projects.Document");
                 }
             });
+            outputobjects = outputobjects.sort(qrysortcolumns);
             //Auslagern !!!!!!!!!!
             console.log("Im Done!!!");
             if (qryresulttype == MxAProject.TEXTFILE) {
-                fs.outputFile(_this.file, result.toTextFileString());
+                fs.outputFile(_this.file, outputobjects.toTextFileString());
             }
             else {
                 console.log("Wrong ResultType");

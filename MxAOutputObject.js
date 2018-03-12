@@ -10,6 +10,10 @@ var MxAOutputObjectList = /** @class */ (function () {
     MxAOutputObjectList.prototype.addObject = function (object) {
         this.objects[this.objects.length] = object;
     };
+    //Sorts all Objects in Container in column order given
+    MxAOutputObjectList.prototype.sort = function (sortcolumns) {
+        return this;
+    };
     //Serialize Container Objects
     MxAOutputObjectList.prototype.toTextFileString = function () {
         var _this = this;
