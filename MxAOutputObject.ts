@@ -1,7 +1,7 @@
 //ClassContainer for a List of MendixObjects
-export class MxAObjectList
+export class MxAOutputObjectList
 {
-    private objects : MxAObject[];      //Array of Objects
+    private objects : MxAOutputObject[];      //Array of Objects
     private propertylength : number = 20;
 
     constructor() {
@@ -9,7 +9,7 @@ export class MxAObjectList
     }
 
     //Add Object to Container
-    public addObject(object : MxAObject) {
+    public addObject(object : MxAOutputObject) {
         this.objects[this.objects.length] = object;
     }
 
@@ -38,16 +38,16 @@ export class MxAObjectList
 }
 
 //Container for a single MendixObject
-export class MxAObject {
-    private propertys : MxAProperty[];   //Array of Propertys
+export class MxAOutputObject {
+    private propertys : MxAOutputObjectProperty[];   //Array of Propertys
 
-    constructor(propertys : MxAProperty[]) {
+    constructor(propertys : MxAOutputObjectProperty[]) {
         this.propertys = propertys;
     }
 
     //Add Property to Object
     public addProperty(name : string, value : string) {
-        let prop = new MxAProperty(name, value);
+        let prop = new MxAOutputObjectProperty(name, value);
         this.propertys[this.propertys.length] = prop
     }
 
@@ -122,7 +122,7 @@ export class MxAObject {
 }
 
 //Container for a single MendixProperty
-export class MxAProperty {
+export class MxAOutputObjectProperty {
     private name : string;      //Name of the Property
     private value : string;     //Value of the Property
 

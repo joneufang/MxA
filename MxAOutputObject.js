@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //ClassContainer for a List of MendixObjects
-var MxAObjectList = /** @class */ (function () {
-    function MxAObjectList() {
+var MxAOutputObjectList = /** @class */ (function () {
+    function MxAOutputObjectList() {
         this.propertylength = 20;
         this.objects = new Array();
     }
     //Add Object to Container
-    MxAObjectList.prototype.addObject = function (object) {
+    MxAOutputObjectList.prototype.addObject = function (object) {
         this.objects[this.objects.length] = object;
     };
     //Serialize Container Objects
-    MxAObjectList.prototype.toTextFileString = function () {
+    MxAOutputObjectList.prototype.toTextFileString = function () {
         var _this = this;
         if (this.objects.length > 0) {
             var result_1 = "";
@@ -30,20 +30,20 @@ var MxAObjectList = /** @class */ (function () {
             return "No Entrys Found";
         }
     };
-    return MxAObjectList;
+    return MxAOutputObjectList;
 }());
-exports.MxAObjectList = MxAObjectList;
+exports.MxAOutputObjectList = MxAOutputObjectList;
 //Container for a single MendixObject
-var MxAObject = /** @class */ (function () {
-    function MxAObject(propertys) {
+var MxAOutputObject = /** @class */ (function () {
+    function MxAOutputObject(propertys) {
         this.propertys = propertys;
     }
     //Add Property to Object
-    MxAObject.prototype.addProperty = function (name, value) {
-        var prop = new MxAProperty(name, value);
+    MxAOutputObject.prototype.addProperty = function (name, value) {
+        var prop = new MxAOutputObjectProperty(name, value);
         this.propertys[this.propertys.length] = prop;
     };
-    MxAObject.prototype.getPropertyValue = function (name) {
+    MxAOutputObject.prototype.getPropertyValue = function (name) {
         var value = "Property not found";
         this.propertys.forEach(function (prop) {
             if (prop.getName() == name) {
@@ -53,14 +53,14 @@ var MxAObject = /** @class */ (function () {
         return value;
     };
     //Serialize ObjectData
-    MxAObject.prototype.toString = function () {
+    MxAOutputObject.prototype.toString = function () {
         var result = "";
         this.propertys.forEach(function (prop) {
             result += prop.toString() + "\t";
         });
         return result;
     };
-    MxAObject.prototype.toStringNormalized = function (size) {
+    MxAOutputObject.prototype.toStringNormalized = function (size) {
         var result = "";
         this.propertys.forEach(function (prop) {
             var delta = size - prop.toString().length;
@@ -73,14 +73,14 @@ var MxAObject = /** @class */ (function () {
         return result;
     };
     //Serialize Object Property Names
-    MxAObject.prototype.getHeader = function () {
+    MxAOutputObject.prototype.getHeader = function () {
         var result = "";
         this.propertys.forEach(function (prop) {
             result += prop.getName() + "\t";
         });
         return result;
     };
-    MxAObject.prototype.getHeaderNormalized = function (size) {
+    MxAOutputObject.prototype.getHeaderNormalized = function (size) {
         var result = "";
         this.propertys.forEach(function (prop) {
             var delta = size - prop.getName().length;
@@ -92,7 +92,7 @@ var MxAObject = /** @class */ (function () {
         });
         return result;
     };
-    MxAObject.prototype.getLongestPropertySize = function () {
+    MxAOutputObject.prototype.getLongestPropertySize = function () {
         var size = 0;
         this.propertys.forEach(function (prop) {
             if (prop.toString().length > size) {
@@ -101,23 +101,23 @@ var MxAObject = /** @class */ (function () {
         });
         return size;
     };
-    return MxAObject;
+    return MxAOutputObject;
 }());
-exports.MxAObject = MxAObject;
+exports.MxAOutputObject = MxAOutputObject;
 //Container for a single MendixProperty
-var MxAProperty = /** @class */ (function () {
-    function MxAProperty(name, value) {
+var MxAOutputObjectProperty = /** @class */ (function () {
+    function MxAOutputObjectProperty(name, value) {
         this.name = name;
         this.value = value;
     }
     //getName of Property
-    MxAProperty.prototype.getName = function () {
+    MxAOutputObjectProperty.prototype.getName = function () {
         return this.name;
     };
     //getValue of Property
-    MxAProperty.prototype.toString = function () {
+    MxAOutputObjectProperty.prototype.toString = function () {
         return this.value;
     };
-    return MxAProperty;
+    return MxAOutputObjectProperty;
 }());
-exports.MxAProperty = MxAProperty;
+exports.MxAOutputObjectProperty = MxAOutputObjectProperty;

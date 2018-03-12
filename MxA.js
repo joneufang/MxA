@@ -14,7 +14,7 @@ var mendixmodelsdk_1 = require("mendixmodelsdk");
 var mendixplatformsdk_1 = require("mendixplatformsdk");
 var when = require("when");
 var fs = require("fs-extra");
-var MxAO = require("./MxAObject");
+var MxAO = require("./MxAOutputObject");
 var qrycons = require("./QueryConstants");
 var MxAProject = /** @class */ (function () {
     function MxAProject(username, apikey, appid) {
@@ -26,7 +26,7 @@ var MxAProject = /** @class */ (function () {
     }
     MxAProject.prototype.getDocsFromProject = function (qrypropertys, qryfilterTypes, qryfilterValues, qrysortcolumn, qryresultType) {
         var _this = this;
-        var result = new MxAO.MxAObjectList();
+        var result = new MxAO.MxAOutputObjectList();
         this.project.createWorkingCopy().then(function (workingCopy) {
             return workingCopy.model().allDocuments();
         })
@@ -38,13 +38,13 @@ var MxAProject = /** @class */ (function () {
                 var mxaobj;
                 qrypropertys.forEach(function (qryprop) {
                     if (qryprop == qrycons.documents.propertys.ID) {
-                        propertys[propertys.length] = new MxAO.MxAProperty("ID", doc.id);
+                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("ID", doc.id);
                     }
                     else if (qryprop == qrycons.documents.propertys.NAME) {
-                        propertys[propertys.length] = new MxAO.MxAProperty("Name", doc.qualifiedName);
+                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Name", doc.qualifiedName);
                     }
                     else if (qryprop == qrycons.documents.propertys.TYPE) {
-                        propertys[propertys.length] = new MxAO.MxAProperty("Type", doc.structureTypeName);
+                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Type", doc.structureTypeName);
                     }
                     else if (qryprop == qrycons.documents.propertys.CONTAINER) {
                         var container = "Kein Container";
@@ -61,13 +61,13 @@ var MxAProject = /** @class */ (function () {
                         }
                         catch (_a) {
                         }
-                        propertys[propertys.length] = new MxAO.MxAProperty("Container", container);
+                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Container", container);
                     }
                     else {
-                        propertys[propertys.length] = new MxAO.MxAProperty("Unknown Property", "Value of Unknown Property");
+                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Unknown Property", "Value of Unknown Property");
                     }
                 });
-                mxaobj = new MxAO.MxAObject(propertys);
+                mxaobj = new MxAO.MxAOutputObject(propertys);
                 qryfilterTypes.forEach(function (qryfilter) {
                     var regex = qryfilterValues[filtercount];
                     var value = mxaobj.getPropertyValue(qryfilter);

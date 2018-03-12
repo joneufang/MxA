@@ -2,7 +2,7 @@ import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwi
 import {MendixSdkClient, Project, OnlineWorkingCopy, loadAsPromise} from "mendixplatformsdk";
 import when = require("when");
 import fs = require("fs-extra");
-import * as MxAO from "./MxAObject";
+import * as MxAO from "./MxAOutputObject";
 import * as qrycons from "./QueryConstants";
 
 
@@ -16,7 +16,10 @@ class MxAProject {
     protected name : string;
     protected key : string;
     protected id : string;
+
     protected file : string;
+    protected htmlresult;
+    protected htmlerror;
 
     protected client : MendixSdkClient;
     protected project : Project;
@@ -33,29 +36,29 @@ class MxAProject {
     }
 
     protected getDocsFromProject(qrypropertys : string[], qryfilterTypes : string[], qryfilterValues : string[], qrysortcolumn : number[], qryresultType : string) {
-        var result : MxAO.MxAObjectList = new MxAO.MxAObjectList();
+        var result : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
         
         this.project.createWorkingCopy().then((workingCopy) => {
             return workingCopy.model().allDocuments();
         })
         .then((documents) => { 
             documents.forEach((doc) => {
-                var propertys : MxAO.MxAProperty[] = new Array();
+                var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
                 var filtered : boolean = false;
                 var filtercount : number = 0;
-                var mxaobj : MxAO.MxAObject;
+                var mxaobj : MxAO.MxAOutputObject;
                 qrypropertys.forEach((qryprop) => {
                     if(qryprop == qrycons.documents.propertys.ID)
                     {
-                        propertys[propertys.length] = new MxAO.MxAProperty("ID",doc.id);
+                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("ID",doc.id);
                     }
                     else if(qryprop == qrycons.documents.propertys.NAME)
                     {
-                        propertys[propertys.length] = new MxAO.MxAProperty("Name",doc.qualifiedName);
+                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Name",doc.qualifiedName);
                     }
                     else if(qryprop == qrycons.documents.propertys.TYPE)
                     {
-                        propertys[propertys.length] = new MxAO.MxAProperty("Type",doc.structureTypeName);
+                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Type",doc.structureTypeName);
                     }
                     else if(qryprop == qrycons.documents.propertys.CONTAINER)
                     {
@@ -77,14 +80,14 @@ class MxAProject {
                         {
 
                         }
-                        propertys[propertys.length] = new MxAO.MxAProperty("Container",container);
+                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Container",container);
                     }
                     else
                     {
-                        propertys[propertys.length] = new MxAO.MxAProperty("Unknown Property","Value of Unknown Property");
+                        propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Unknown Property","Value of Unknown Property");
                     }
                 })
-                mxaobj = new MxAO.MxAObject(propertys);
+                mxaobj = new MxAO.MxAOutputObject(propertys);
                 qryfilterTypes.forEach((qryfilter) => {
                     var regex = qryfilterValues[filtercount];
                     var value = mxaobj.getPropertyValue(qryfilter); 
@@ -122,9 +125,6 @@ class MxAProject {
 }    
 
 export class MxAToHtmlTable extends MxAProject {
-
-    private htmlresult;
-    private htmlerror;
 
     public constructor(username : string, apikey : string, appid : string, htmlresultfield : string, htmlerrorfield? : string) {
         super(username, apikey, appid);
