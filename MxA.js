@@ -40,15 +40,7 @@ var MxAProject = /** @class */ (function () {
                     var mxaobj;
                     propertys = documentadapter.getPropertys(doc, qrypropertys);
                     mxaobj = new MxAO.MxAOutputObject(propertys);
-                    qryfilterTypes.forEach(function (qryfilter) {
-                        var regex = qryfilterValues[filtercount];
-                        var value = mxaobj.getPropertyValue(qryfilter);
-                        if (!(value.match(regex) || regex == value)) {
-                            filtered = true;
-                        }
-                        filtercount++;
-                    });
-                    if (!filtered) {
+                    if (documentadapter.filter(mxaobj, qryfilterTypes, qryfilterValues)) {
                         result.addObject(mxaobj);
                     }
                 }
