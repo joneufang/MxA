@@ -26,7 +26,7 @@ project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME, qr
 
 
 
-/* 
+/* //REPLACE TEST
 var client = new MendixSdkClient(username, apikey);
 var project = new Project(client, projectId, "");
 
@@ -64,7 +64,7 @@ function loadAllDocumentsAsPromise(documents: projects.IDocument[]): when.Promis
 }*/
 
 
-/*
+/*  //SORTING TEST
 var objects : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
 
 var props : MxAO.MxAOutputObjectProperty[] = new Array();

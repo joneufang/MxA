@@ -13,7 +13,7 @@ project.getDocumentsFromProject([QueryConstants_1.documents.propertys.ID, QueryC
 //project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME,qrycons.propertys.TYPE], [qrycons.filter.TYPE,qrycons.filter.NAME], ["Microflow","Testapp"], []); //filtered Result
 //project.getDocumentsFromProject([qrycons.documents.propertys.ID,qrycons.documents.propertys.NAME,qrycons.documents.propertys.TYPE], [qrycons.documents.filter.TYPE], ["No Result Entry"], [1]); //No Result
 //qrycons.propertys.ID,qrycons.propertys.NAME, qrycons.propertys.TYPE, qrycons.propertys.CONTAINER
-/*
+/* //REPLACE TEST
 var client = new MendixSdkClient(username, apikey);
 var project = new Project(client, projectId, "");
 
@@ -49,7 +49,7 @@ project.createWorkingCopy().then((workingCopy) => {
 function loadAllDocumentsAsPromise(documents: projects.IDocument[]): when.Promise<projects.Document[]> {
     return when.all<projects.Document[]>(documents.map( doc => loadAsPromise(doc)));
 }*/
-/*
+/*  //SORTING TEST
 var objects : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
 
 var props : MxAO.MxAOutputObjectProperty[] = new Array();
