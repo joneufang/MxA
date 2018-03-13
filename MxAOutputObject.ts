@@ -79,6 +79,7 @@ export class MxAOutputObjectList
         
     }
 
+    //Serialize Container Objects for a XMLFile
     protected toXMLFileString() {
         var xml = new XMLWriter();
         if(this.objects.length > 0) {
