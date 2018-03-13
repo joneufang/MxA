@@ -50,44 +50,30 @@ class MxAProject {
             return workingCopy.model().allDocuments();
         })
         .then((documents) => { 
-            
             return this.loadAllDocumentsAsPromise(documents);
         })
         .done((loadeddocs) => {
-        
-            //Get filtered Documents
             loadeddocs.forEach((doc) => {
                 if(doc instanceof projects.Document){
                     var documentadapter : MxAA.MxADocumentAdapter = new MxAA.MxADocumentAdapter();
                     var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
                     var mxaobj : MxAO.MxAOutputObject;
-    
                     propertys = documentadapter.getPropertys(doc, qrypropertys);
-    
-                    mxaobj = new MxAO.MxAOutputObject(propertys);
-
-                    //filter
+                    mxaobj = new MxAO.MxAOutputObject(propertys);                   //Get filtered Documents
                     if(documentadapter.filter(mxaobj,qryfiltertypes, qryfiltervalues))
                     {
-                        outputobjects.addObject(mxaobj);
+                        outputobjects.addObject(mxaobj);                        //filter object
                     }
                 }
                 else
                 {
                     console.log("Got Document which is not instance of projects.Document");
                 }
-                
             });
-
-            //Sort Objects
-            outputobjects = outputobjects.sort(qrysortcolumns);
-
-            //Return As Output Type
-            outputobjects.returnResult(qryresulttype,this.target)
-
+            outputobjects = outputobjects.sort(qrysortcolumns);         //Sort Objects
+            outputobjects.returnResult(qryresulttype,this.target);       //Return As Output Type
             console.log("Im Done!!!");
         });
-
     }
 
     protected loadAllDocumentsAsPromise(documents: projects.IDocument[]): when.Promise<projects.Document[]> {

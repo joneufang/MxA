@@ -43,27 +43,23 @@ var MxAProject = (function () {
             return _this.loadAllDocumentsAsPromise(documents);
         })
             .done(function (loadeddocs) {
-            //Get filtered Documents
             loadeddocs.forEach(function (doc) {
                 if (doc instanceof mendixmodelsdk_1.projects.Document) {
                     var documentadapter = new MxAA.MxADocumentAdapter();
                     var propertys = new Array();
                     var mxaobj;
                     propertys = documentadapter.getPropertys(doc, qrypropertys);
-                    mxaobj = new MxAO.MxAOutputObject(propertys);
-                    //filter
+                    mxaobj = new MxAO.MxAOutputObject(propertys); //Get filtered Documents
                     if (documentadapter.filter(mxaobj, qryfiltertypes, qryfiltervalues)) {
-                        outputobjects.addObject(mxaobj);
+                        outputobjects.addObject(mxaobj); //filter object
                     }
                 }
                 else {
                     console.log("Got Document which is not instance of projects.Document");
                 }
             });
-            //Sort Objects
-            outputobjects = outputobjects.sort(qrysortcolumns);
-            //Return As Output Type
-            outputobjects.returnResult(qryresulttype, _this.target);
+            outputobjects = outputobjects.sort(qrysortcolumns); //Sort Objects
+            outputobjects.returnResult(qryresulttype, _this.target); //Return As Output Type
             console.log("Im Done!!!");
         });
     };
