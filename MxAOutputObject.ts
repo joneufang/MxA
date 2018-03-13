@@ -79,36 +79,17 @@ export class MxAOutputObjectList
         
     }
 
-    //Serialize Container Objects for a XML File
     protected toXMLFileString() {
-        if(this.objects.length > 0) {
-            let result : string = "";
-            result += "<?xml version=\"1.0\"?>\n";
-            this.objects.forEach((obj) => {
-                result += "<MxAObject>" + "\n";
-                result += obj.toXMLString();
-                result += "</MxAObject>" + "\n";
-            });
-            return result;
-        }
-        else
-        {
-            return "No Entrys Found";
-        }
-    }
-
-    /*
-    protected toXMLFileString2() {
         var xml = new XMLWriter();
-        
-        
         if(this.objects.length > 0) {
             xml.startDocument();
+            xml.startElement("MxACatalog");
             this.objects.forEach((obj) => {
                 xml.startElement("MxAObject");
-                xml = obj.toXMLString2(xml);
+                xml = obj.toXMLString(xml);
                 xml.endElement();
             });
+            xml.endElement();
             xml.endDocument();
             return xml.toString();
         }
@@ -116,7 +97,7 @@ export class MxAOutputObjectList
         {
             return "No Entrys Found";
         }
-    }*/
+    }
 
     //Gives out OutputObjectList
     public returnResult(resultType : string, target : string) {
@@ -173,23 +154,14 @@ export class MxAOutputObject {
     }
 
     //Serialzie ObjectData to XML
-    public toXMLString() {
-        let result : string = "";
-        this.propertys.forEach((prop) => {
-            result += "\t<" + prop.getName() + ">" + prop.toString() + "</" + prop.getName() + ">" + "\n";
-        });
-        return result;
-    }
-
-    /*
-    public toXMLString2(xml : XMLWriter) {
+    public toXMLString(xml : XMLWriter) {
         this.propertys.forEach((prop) => {
             xml.startElement(prop.getName());
             xml.text(prop.toString());
             xml.endElement();
         });
         return xml;
-    }*/
+    }
 
     //Serialize ObjectData with Column length size for TextFile Output
     public toStringNormalized(size : number) {

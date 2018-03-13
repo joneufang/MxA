@@ -45,7 +45,7 @@ export class MxAObjectAdapter {
                 container = modul.name;
             }
         }
-        catch
+        catch(error)
         {
 
         }

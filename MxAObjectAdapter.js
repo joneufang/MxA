@@ -14,7 +14,7 @@ var mendixmodelsdk_1 = require("mendixmodelsdk");
 var MxAO = require("./MxAOutputObject");
 var qrycons = require("./QueryConstants");
 //Adapter to get propertys and filter Mendix Objects
-var MxAObjectAdapter = /** @class */ (function () {
+var MxAObjectAdapter = (function () {
     function MxAObjectAdapter() {
     }
     //Get Id of Mendix Object
@@ -44,7 +44,7 @@ var MxAObjectAdapter = /** @class */ (function () {
                 container = modul.name;
             }
         }
-        catch (_a) {
+        catch (error) {
         }
         property = new MxAO.MxAOutputObjectProperty("CONTAINER", container);
         return property;
@@ -68,7 +68,7 @@ var MxAObjectAdapter = /** @class */ (function () {
 }());
 exports.MxAObjectAdapter = MxAObjectAdapter;
 //Adapter to get propertys of Mendix Documents
-var MxADocumentAdapter = /** @class */ (function (_super) {
+var MxADocumentAdapter = (function (_super) {
     __extends(MxADocumentAdapter, _super);
     function MxADocumentAdapter() {
         return _super.call(this) || this;

@@ -15,10 +15,11 @@ let projectName = `7-2-0-ATSTest`;
 let projectId = `01bfc705-81e4-4ffa-8bc9-0c43e7f2b5ba`;
 
 
-let project = new mendixanalytics.MxAToTextFile(username, apikey, projectId, "./Test.txt");
-//let project = new mendixanalytics.MxAToXMLFile(username, apikey, projectId, "./Test.xml");
+//let project = new mendixanalytics.MxAToTextFile(username, apikey, projectId, "./Test.txt");
+let project = new mendixanalytics.MxAToXMLFile(username, apikey, projectId, "./Test.xml");
 //project.getDocumentsFromProject([qrycons.propertys.ALL], [], [], [1]); //All Propertys unfiltered
 project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME, qrycons.propertys.TYPE, qrycons.propertys.CONTAINER], [], [], [qrycons.sorting.TYPE,qrycons.sorting.NAME]);  //unfiltered Result with sorting
+//project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME, qrycons.propertys.TYPE, qrycons.propertys.CONTAINER], [qrycons.filter.NAME], ["Testapp"], [qrycons.sorting.TYPE,qrycons.sorting.NAME]);  //filtered Result with sorting
 //project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME,qrycons.propertys.TYPE], [qrycons.filter.TYPE,qrycons.filter.NAME], ["Microflow","Testapp"], []); //filtered Result
 //project.getDocumentsFromProject([qrycons.documents.propertys.ID,qrycons.documents.propertys.NAME,qrycons.documents.propertys.TYPE], [qrycons.documents.filter.TYPE], ["No Result Entry"], [1]); //No Result
 

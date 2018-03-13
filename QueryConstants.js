@@ -1,5 +1,5 @@
-"use strict";
 //All Constants for Propertys and Filter
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var documents;
 (function (documents) {
