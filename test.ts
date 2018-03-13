@@ -1,17 +1,15 @@
-import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwidgets, projects, documenttemplates} from "mendixmodelsdk";
-import {MendixSdkClient, Project, OnlineWorkingCopy, loadAsPromise} from "mendixplatformsdk";
-import when = require("when");
-import XMLWriter = require('xml-writer');
-import fs = require("fs-extra");
-import * as MxAO from "./MxAOutputObject";
-import * as MxAA from "./MxAObjectAdapter";
+//import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwidgets, projects, documenttemplates} from "mendixmodelsdk";
+//import {MendixSdkClient, Project, OnlineWorkingCopy, loadAsPromise} from "mendixplatformsdk";
+//import when = require("when");
+//import XMLWriter = require('xml-writer');
+//import fs = require("fs-extra");
+//import * as MxAO from "./MxAOutputObject";
+//import * as MxAA from "./MxAObjectAdapter";
 import * as mendixanalytics from "./MxA";
 import { documents as qrycons } from "./QueryConstants";
 
 const username = 'jochen.neufang@mansystems.de';
 const apikey = 'e6a890bf-6377-4395-8924-87bfe8da7330';
-// Please change your project Id and name to something you prefer.
-let projectName = `7-2-0-ATSTest`;
 let projectId = `01bfc705-81e4-4ffa-8bc9-0c43e7f2b5ba`;
 
 
