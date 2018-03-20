@@ -76,9 +76,21 @@ export class MxAStructureAdapter {
     }
 }
 
+export class MxAAbstractElementAdapter extends MxAStructureAdapter{
+    constructor() {
+        super();   
+    }
+}
+
+export class MxAModuleDocumentAdapter extends MxAAbstractElementAdapter{
+    constructor() {
+        super();   
+    }
+}
+
 
 //Adapter to get propertys of Mendix Documents
-export class MxADocumentAdapter extends MxAStructureAdapter {
+export class MxADocumentAdapter extends MxAModuleDocumentAdapter {
     
     constructor() {
         super();   

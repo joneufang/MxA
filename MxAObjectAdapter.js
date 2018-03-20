@@ -67,6 +67,22 @@ var MxAStructureAdapter = /** @class */ (function () {
     return MxAStructureAdapter;
 }());
 exports.MxAStructureAdapter = MxAStructureAdapter;
+var MxAAbstractElementAdapter = /** @class */ (function (_super) {
+    __extends(MxAAbstractElementAdapter, _super);
+    function MxAAbstractElementAdapter() {
+        return _super.call(this) || this;
+    }
+    return MxAAbstractElementAdapter;
+}(MxAStructureAdapter));
+exports.MxAAbstractElementAdapter = MxAAbstractElementAdapter;
+var MxAModuleDocumentAdapter = /** @class */ (function (_super) {
+    __extends(MxAModuleDocumentAdapter, _super);
+    function MxAModuleDocumentAdapter() {
+        return _super.call(this) || this;
+    }
+    return MxAModuleDocumentAdapter;
+}(MxAAbstractElementAdapter));
+exports.MxAModuleDocumentAdapter = MxAModuleDocumentAdapter;
 //Adapter to get propertys of Mendix Documents
 var MxADocumentAdapter = /** @class */ (function (_super) {
     __extends(MxADocumentAdapter, _super);
@@ -133,5 +149,5 @@ var MxADocumentAdapter = /** @class */ (function (_super) {
         return property;
     };
     return MxADocumentAdapter;
-}(MxAStructureAdapter));
+}(MxAModuleDocumentAdapter));
 exports.MxADocumentAdapter = MxADocumentAdapter;

@@ -13,8 +13,8 @@ const apikey = 'e6a890bf-6377-4395-8924-87bfe8da7330';
 let projectId = `01bfc705-81e4-4ffa-8bc9-0c43e7f2b5ba`;
 
 
-//let project = new mendixanalytics.MxAToTextFile(username, apikey, projectId, "./Test.txt");
-let project = new mendixanalytics.MxAToXMLFile(username, apikey, projectId, "./Test.xml");
+let project = new mendixanalytics.MxAToTextFile(username, apikey, projectId, "./Test.txt");
+//let project = new mendixanalytics.MxAToXMLFile(username, apikey, projectId, "./Test.xml");
 //project.getDocumentsFromProject([qrycons.propertys.ALL], [], [], [1]); //All Propertys unfiltered
 //project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME, qrycons.propertys.TYPE, qrycons.propertys.CONTAINER], [], [], [qrycons.sorting.TYPE,qrycons.sorting.NAME]);  //unfiltered Result with sorting
 project.getDocumentsFromProject([qrycons.ID,qrycons.NAME, qrycons.TYPE, qrycons.CONTAINER], [qrycons.NAME], ["Testapp"], [qrycons.TYPE,qrycons.NAME]);  //filtered Result with sorting
