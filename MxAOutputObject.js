@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs-extra");
 var XMLWriter = require("xml-writer");
 //ClassContainer for a List of OutputObjects
-var MxAOutputObjectList = (function () {
+var MxAOutputObjectList = /** @class */ (function () {
     function MxAOutputObjectList() {
         //Constants to define output target
         this.TEXTFILE = "TEXTFILE";
@@ -62,13 +62,14 @@ var MxAOutputObjectList = (function () {
             return "No Entrys Found";
         }
     };
+    //Serialize Container Objects for a XMLFile
     MxAOutputObjectList.prototype.toXMLFileString = function () {
         var xml = new XMLWriter();
         if (this.objects.length > 0) {
             xml.startDocument();
             xml.startElement("MxACatalog");
             this.objects.forEach(function (obj) {
-                xml.startElement("MxAObject");
+                xml.startElement(obj.getType());
                 xml = obj.toXMLString(xml);
                 xml.endElement();
             });
@@ -96,9 +97,10 @@ var MxAOutputObjectList = (function () {
 }());
 exports.MxAOutputObjectList = MxAOutputObjectList;
 //Container for a single MendixObject
-var MxAOutputObject = (function () {
-    function MxAOutputObject(propertys) {
+var MxAOutputObject = /** @class */ (function () {
+    function MxAOutputObject(propertys, type) {
         this.propertys = propertys;
+        this.type = type;
     }
     //Add Property to Object
     MxAOutputObject.prototype.addProperty = function (name, value) {
@@ -114,6 +116,9 @@ var MxAOutputObject = (function () {
             }
         });
         return value;
+    };
+    MxAOutputObject.prototype.getType = function () {
+        return this.type;
     };
     //Serialize ObjectData
     MxAOutputObject.prototype.toString = function () {
@@ -180,7 +185,7 @@ var MxAOutputObject = (function () {
 }());
 exports.MxAOutputObject = MxAOutputObject;
 //Container for a single MendixProperty
-var MxAOutputObjectProperty = (function () {
+var MxAOutputObjectProperty = /** @class */ (function () {
     function MxAOutputObjectProperty(name, value) {
         this.name = name;
         this.value = value;

@@ -59,7 +59,7 @@ class MxAProject {
                     var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
                     var mxaobj : MxAO.MxAOutputObject;
                     propertys = documentadapter.getPropertys(doc, qrypropertys);
-                    mxaobj = new MxAO.MxAOutputObject(propertys);                   //Get filtered Documents
+                    mxaobj = new MxAO.MxAOutputObject(propertys,"Document");                   //Get filtered Documents
                     if(documentadapter.filter(mxaobj,qryfiltertypes, qryfiltervalues))
                     {
                         outputobjects.addObject(mxaobj);                        //filter object

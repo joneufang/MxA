@@ -16,7 +16,7 @@ var when = require("when");
 var MxAO = require("./MxAOutputObject");
 var MxAA = require("./MxAObjectAdapter");
 //Mendix Analytics Project without specified Output Type
-var MxAProject = (function () {
+var MxAProject = /** @class */ (function () {
     //Standard Constructor creates Mendix SDK Client and Project
     function MxAProject(username, apikey, appid) {
         this.name = username;
@@ -49,7 +49,7 @@ var MxAProject = (function () {
                     var propertys = new Array();
                     var mxaobj;
                     propertys = documentadapter.getPropertys(doc, qrypropertys);
-                    mxaobj = new MxAO.MxAOutputObject(propertys); //Get filtered Documents
+                    mxaobj = new MxAO.MxAOutputObject(propertys, "Document"); //Get filtered Documents
                     if (documentadapter.filter(mxaobj, qryfiltertypes, qryfiltervalues)) {
                         outputobjects.addObject(mxaobj); //filter object
                     }
@@ -66,15 +66,15 @@ var MxAProject = (function () {
     MxAProject.prototype.loadAllDocumentsAsPromise = function (documents) {
         return when.all(documents.map(function (doc) { return mendixplatformsdk_1.loadAsPromise(doc); }));
     };
+    //Constants to define output target
+    MxAProject.TEXTFILE = "TEXTFILE";
+    MxAProject.HTMLTABLE = "HTMLTABLE";
+    MxAProject.XML = "XML";
+    MxAProject.JSON = "JSON";
     return MxAProject;
 }());
-//Constants to define output target
-MxAProject.TEXTFILE = "TEXTFILE";
-MxAProject.HTMLTABLE = "HTMLTABLE";
-MxAProject.XML = "XML";
-MxAProject.JSON = "JSON";
 //Mendix Analytics Project with HTMLElement as ResultType
-var MxAToHtmlTable = (function (_super) {
+var MxAToHtmlTable = /** @class */ (function (_super) {
     __extends(MxAToHtmlTable, _super);
     function MxAToHtmlTable(username, apikey, appid, htmlresultfield) {
         var _this = _super.call(this, username, apikey, appid) || this;
@@ -88,7 +88,7 @@ var MxAToHtmlTable = (function (_super) {
 }(MxAProject));
 exports.MxAToHtmlTable = MxAToHtmlTable;
 //Mendix Analytics Project with TextFile as ResultType
-var MxAToTextFile = (function (_super) {
+var MxAToTextFile = /** @class */ (function (_super) {
     __extends(MxAToTextFile, _super);
     function MxAToTextFile(username, apikey, appid, textfile) {
         var _this = _super.call(this, username, apikey, appid) || this;
@@ -102,7 +102,7 @@ var MxAToTextFile = (function (_super) {
 }(MxAProject));
 exports.MxAToTextFile = MxAToTextFile;
 //Mendix Analytics Project with XMLFile as ResultType
-var MxAToXMLFile = (function (_super) {
+var MxAToXMLFile = /** @class */ (function (_super) {
     __extends(MxAToXMLFile, _super);
     function MxAToXMLFile(username, apikey, appid, xmlfile) {
         var _this = _super.call(this, username, apikey, appid) || this;

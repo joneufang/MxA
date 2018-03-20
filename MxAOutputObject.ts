@@ -86,7 +86,7 @@ export class MxAOutputObjectList
             xml.startDocument();
             xml.startElement("MxACatalog");
             this.objects.forEach((obj) => {
-                xml.startElement("MxAObject");
+                xml.startElement(obj.getType());
                 xml = obj.toXMLString(xml);
                 xml.endElement();
             });
@@ -121,9 +121,11 @@ export class MxAOutputObjectList
 //Container for a single MendixObject
 export class MxAOutputObject {
     private propertys : MxAOutputObjectProperty[];   //Array of Propertys
+    private type : String;
 
-    constructor(propertys : MxAOutputObjectProperty[]) {
+    constructor(propertys : MxAOutputObjectProperty[], type : String) {
         this.propertys = propertys;
+        this.type = type;
     }
 
     //Add Property to Object
@@ -143,6 +145,11 @@ export class MxAOutputObject {
             }
         });
         return value; 
+    }
+
+    public getType()
+    {
+        return this.type;
     }
 
     //Serialize ObjectData

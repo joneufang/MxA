@@ -14,7 +14,7 @@ var mendixmodelsdk_1 = require("mendixmodelsdk");
 var MxAO = require("./MxAOutputObject");
 var qrycons = require("./QueryConstants");
 //Adapter to get propertys and filter Mendix Objects
-var MxAObjectAdapter = (function () {
+var MxAObjectAdapter = /** @class */ (function () {
     function MxAObjectAdapter() {
     }
     //Get Id of Mendix Object
@@ -68,7 +68,7 @@ var MxAObjectAdapter = (function () {
 }());
 exports.MxAObjectAdapter = MxAObjectAdapter;
 //Adapter to get propertys of Mendix Documents
-var MxADocumentAdapter = (function (_super) {
+var MxADocumentAdapter = /** @class */ (function (_super) {
     __extends(MxADocumentAdapter, _super);
     function MxADocumentAdapter() {
         return _super.call(this) || this;
