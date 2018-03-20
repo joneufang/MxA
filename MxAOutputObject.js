@@ -81,6 +81,31 @@ var MxAOutputObjectList = /** @class */ (function () {
             return "No Entrys Found";
         }
     };
+    MxAOutputObjectList.prototype.toJSONFileString = function () {
+        var result = "";
+        var objectcounter = 0;
+        if (this.objects.length > 0) {
+            result += "{\n";
+            result += "\"MxACatalog\": {\n";
+            for (var i = 0; i < this.objects.length; i++) {
+                result += "\"" + this.objects[i].getType() + objectcounter + "\": {";
+                objectcounter += 1;
+                result += this.objects[i].toJSONString();
+                if (i < this.objects.length - 1) {
+                    result += "},\n";
+                }
+                else {
+                    result += "}\n";
+                }
+            }
+            result += "}\n";
+            result += "}\n";
+            return result;
+        }
+        else {
+            return "No Entrys Found";
+        }
+    };
     //Gives out OutputObjectList
     MxAOutputObjectList.prototype.returnResult = function (resultType, target) {
         if (resultType == this.TEXTFILE) {
@@ -93,7 +118,8 @@ var MxAOutputObjectList = /** @class */ (function () {
             fs.outputFile(target, "ReturnFormat HTML not implemented yet");
         }
         else if (resultType == this.JSON) {
-            fs.outputFile(target, "ReturnFormat JSON not implemented yet");
+            //fs.outputFile(target, "ReturnFormat JSON not implemented yet");
+            fs.outputFile(target, this.toJSONFileString());
         }
         else {
             console.log("Wrong ResultType");
@@ -142,6 +168,19 @@ var MxAOutputObject = /** @class */ (function () {
             xml.endElement();
         });
         return xml;
+    };
+    MxAOutputObject.prototype.toJSONString = function () {
+        var result = "";
+        result;
+        for (var i = 0; i < this.propertys.length; i++) {
+            if (i < this.propertys.length - 1) {
+                result += "\"" + this.propertys[i].getName() + "\": \"" + this.propertys[i].toString() + "\",";
+            }
+            else {
+                result += "\"" + this.propertys[i].getName() + "\": \"" + this.propertys[i].toString() + "\"";
+            }
+        }
+        return result;
     };
     //Serialize ObjectData with Column length size for TextFile Output
     MxAOutputObject.prototype.toStringNormalized = function (size) {
