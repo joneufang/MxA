@@ -89,6 +89,12 @@ var MxAOutputObjectList = /** @class */ (function () {
         else if (resultType == this.XML) {
             fs.outputFile(target, this.toXMLFileString());
         }
+        else if (resultType == this.HTMLTABLE) {
+            fs.outputFile(target, "ReturnFormat HTML not implemented yet");
+        }
+        else if (resultType == this.JSON) {
+            fs.outputFile(target, "ReturnFormat JSON not implemented yet");
+        }
         else {
             console.log("Wrong ResultType");
         }

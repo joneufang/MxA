@@ -63,6 +63,9 @@ var MxAProject = /** @class */ (function () {
     MxAProject.prototype.getProjectDocumentsAsTXT = function (propertys, filter, sortcolumn, filename) {
         this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
     };
+    MxAProject.prototype.getProjectDocumentsAsJSON = function (propertys, filter, sortcolumn, filename) {
+        this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.JSON, filename);
+    };
     MxAProject.prototype.getModuleDocuments = function (modulename, qrypropertys, filter, qrysortcolumns, qryresulttype, filename) {
         var outputobjects = new MxAO.MxAOutputObjectList();
         this.project.createWorkingCopy().then(function (workingCopy) {
@@ -97,6 +100,9 @@ var MxAProject = /** @class */ (function () {
     };
     MxAProject.prototype.getModuleDocumentsAsXML = function (modulename, propertys, filter, sortcolumn, filename) {
         this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.XML, filename);
+    };
+    MxAProject.prototype.getModuleDocumentsAsJSON = function (modulename, propertys, filter, sortcolumn, filename) {
+        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.JSON, filename);
     };
     MxAProject.prototype.getFolderDocuments = function (foldername, qrypropertys, filter, qrysortcolumns, qryresulttype, filename) {
         var outputobjects = new MxAO.MxAOutputObjectList();
@@ -133,8 +139,17 @@ var MxAProject = /** @class */ (function () {
             }
         });
     };
+    MxAProject.prototype.getFolderDocumentsAsHTML = function (foldername, propertys, filter, sortcolumn, filename) {
+        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.HTMLTABLE, filename);
+    };
     MxAProject.prototype.getFolderDocumentsAsTXT = function (foldername, propertys, filter, sortcolumn, filename) {
         this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
+    };
+    MxAProject.prototype.getFolderDocumentsAsXML = function (foldername, propertys, filter, sortcolumn, filename) {
+        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.XML, filename);
+    };
+    MxAProject.prototype.getFolderDocumentsAsJSON = function (foldername, propertys, filter, sortcolumn, filename) {
+        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.JSON, filename);
     };
     MxAProject.prototype.loadAllDocumentsAsPromise = function (documents) {
         return when.all(documents.map(function (doc) { return mendixplatformsdk_1.loadAsPromise(doc); }));

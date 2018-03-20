@@ -89,6 +89,10 @@ export class MxAProject {
         this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
     }
 
+    public getProjectDocumentsAsJSON(propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
+        this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.JSON, filename);
+    }
+
     protected getModuleDocuments(modulename : string, qrypropertys : string[], filter : Filter[], qrysortcolumns : string[], qryresulttype : string, filename: string) {
         var outputobjects : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
         this.project.createWorkingCopy().then((workingCopy) => {
@@ -130,6 +134,10 @@ export class MxAProject {
         this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.XML, filename);
     }
 
+    public getModuleDocumentsAsJSON(modulename : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
+        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.JSON, filename);
+    }
+
     protected getFolderDocuments(foldername : string, qrypropertys : string[], filter : Filter[], qrysortcolumns : string[], qryresulttype : string, filename: string) {
         var outputobjects : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
         var folderfound : boolean = false;
@@ -169,8 +177,20 @@ export class MxAProject {
         })
     }
 
+    public getFolderDocumentsAsHTML(foldername : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
+        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.HTMLTABLE, filename);
+    }
+
     public getFolderDocumentsAsTXT(foldername : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
         this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
+    }
+
+    public getFolderDocumentsAsXML(foldername : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
+        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.XML, filename);
+    }
+
+    public getFolderDocumentsAsJSON(foldername : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
+        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.JSON, filename);
     }
 
     protected loadAllDocumentsAsPromise(documents: projects.IDocument[]): when.Promise<projects.Document[]> {
