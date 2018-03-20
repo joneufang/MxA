@@ -33,7 +33,7 @@ var MxAProject = /** @class */ (function () {
     Parameter: qrysortcolumns : number[]    Array of Columnnumbers for sorting
     Parameter: qryresulttype : string       Constant which ResultType should be used
     */
-    MxAProject.prototype.getDocsFromProject = function (qrypropertys, qryfiltertypes, qryfiltervalues, qrysortcolumns, qryresulttype) {
+    MxAProject.prototype.getDocsFromProject = function (qrypropertys, filter, qrysortcolumns, qryresulttype) {
         var _this = this;
         var outputobjects = new MxAO.MxAOutputObjectList();
         this.project.createWorkingCopy().then(function (workingCopy) {
@@ -50,7 +50,7 @@ var MxAProject = /** @class */ (function () {
                     var mxaobj;
                     propertys = documentadapter.getPropertys(doc, qrypropertys);
                     mxaobj = new MxAO.MxAOutputObject(propertys, "Document"); //Get filtered Documents
-                    if (documentadapter.filter(mxaobj, qryfiltertypes, qryfiltervalues)) {
+                    if (documentadapter.filter(mxaobj, filter)) {
                         outputobjects.addObject(mxaobj); //filter object
                     }
                 }
@@ -81,8 +81,8 @@ var MxAToHtmlTable = /** @class */ (function (_super) {
         _this.target = htmlresultfield;
         return _this;
     }
-    MxAToHtmlTable.prototype.getDocumentsFromProject = function (propertys, filterTypes, filterValues, sortcolumn) {
-        _super.prototype.getDocsFromProject.call(this, propertys, filterTypes, filterValues, sortcolumn, MxAProject.HTMLTABLE);
+    MxAToHtmlTable.prototype.getDocumentsFromProject = function (propertys, filter, sortcolumn) {
+        _super.prototype.getDocsFromProject.call(this, propertys, filter, sortcolumn, MxAProject.HTMLTABLE);
     };
     return MxAToHtmlTable;
 }(MxAProject));
@@ -95,8 +95,8 @@ var MxAToTextFile = /** @class */ (function (_super) {
         _this.target = textfile;
         return _this;
     }
-    MxAToTextFile.prototype.getDocumentsFromProject = function (propertys, filterTypes, filterValues, sortcolumn) {
-        _super.prototype.getDocsFromProject.call(this, propertys, filterTypes, filterValues, sortcolumn, MxAProject.TEXTFILE);
+    MxAToTextFile.prototype.getDocumentsFromProject = function (propertys, filter, sortcolumn) {
+        _super.prototype.getDocsFromProject.call(this, propertys, filter, sortcolumn, MxAProject.TEXTFILE);
     };
     return MxAToTextFile;
 }(MxAProject));
@@ -109,9 +109,23 @@ var MxAToXMLFile = /** @class */ (function (_super) {
         _this.target = xmlfile;
         return _this;
     }
-    MxAToXMLFile.prototype.getDocumentsFromProject = function (propertys, filterTypes, filterValues, sortcolumn) {
-        _super.prototype.getDocsFromProject.call(this, propertys, filterTypes, filterValues, sortcolumn, MxAProject.XML);
+    MxAToXMLFile.prototype.getDocumentsFromProject = function (propertys, filter, sortcolumn) {
+        _super.prototype.getDocsFromProject.call(this, propertys, filter, sortcolumn, MxAProject.XML);
     };
     return MxAToXMLFile;
 }(MxAProject));
 exports.MxAToXMLFile = MxAToXMLFile;
+var Filter = /** @class */ (function () {
+    function Filter(filtertype, filtervalue) {
+        this.filtertype = filtertype;
+        this.filtervalue = filtervalue;
+    }
+    Filter.prototype.getType = function () {
+        return this.filtertype;
+    };
+    Filter.prototype.getValue = function () {
+        return this.filtervalue;
+    };
+    return Filter;
+}());
+exports.Filter = Filter;

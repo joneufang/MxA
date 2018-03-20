@@ -1,5 +1,6 @@
 import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwidgets, projects, documenttemplates, AbstractElement} from "mendixmodelsdk";
 import * as MxAO from "./MxAOutputObject";
+import * as MxA from "./MxA";
 import * as qrycons from "./QueryConstants";
 import { Structure } from "mendixmodelsdk/dist/sdk/internal/structures";
 
@@ -57,14 +58,15 @@ export class MxAStructureAdapter {
 
     //Filters Output Object
     //Returns true if Object passes all filters
-    public filter(mxaobject : MxAO.MxAOutputObject, qryfilterTypes : string[], qryfilterValues : string[]) : boolean
+    public filter(mxaobject : MxAO.MxAOutputObject, filter : MxA.Filter[]) : boolean
     {
         var filtered : boolean = true;
         var filtercount : number = 0;
 
-        qryfilterTypes.forEach((qryfilter) => {
-            var regex = qryfilterValues[filtercount];
-            var value = mxaobject.getPropertyValue(qryfilter); 
+        filter.forEach((qryfilter) => {
+            //onsole.log("FilterType: " + qryfilter.getType)
+            var regex = qryfilter.getValue();
+            var value = mxaobject.getPropertyValue(qryfilter.getType()); 
             if(!(value.match(regex) || regex == value))
             {
                 filtered = false;

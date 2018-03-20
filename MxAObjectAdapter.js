@@ -51,12 +51,13 @@ var MxAStructureAdapter = /** @class */ (function () {
     };
     //Filters Output Object
     //Returns true if Object passes all filters
-    MxAStructureAdapter.prototype.filter = function (mxaobject, qryfilterTypes, qryfilterValues) {
+    MxAStructureAdapter.prototype.filter = function (mxaobject, filter) {
         var filtered = true;
         var filtercount = 0;
-        qryfilterTypes.forEach(function (qryfilter) {
-            var regex = qryfilterValues[filtercount];
-            var value = mxaobject.getPropertyValue(qryfilter);
+        filter.forEach(function (qryfilter) {
+            //onsole.log("FilterType: " + qryfilter.getType)
+            var regex = qryfilter.getValue();
+            var value = mxaobject.getPropertyValue(qryfilter.getType());
             if (!(value.match(regex) || regex == value)) {
                 filtered = false;
             }
