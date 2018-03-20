@@ -81,6 +81,25 @@ var MxAOutputObjectList = /** @class */ (function () {
             return "No Entrys Found";
         }
     };
+    MxAOutputObjectList.prototype.toHTMLFileString = function () {
+        var result = "";
+        if (this.objects.length > 0) {
+            result += "<table style=\"width:100%\">\n";
+            result += "<tr>\n";
+            result += this.objects[0].toHTMLHeader();
+            result += "</tr>\n";
+            this.objects.forEach(function (obj) {
+                result += "<tr>\n";
+                result += obj.toHTMLString();
+                result += "</tr>\n";
+            });
+            result += "</table>";
+            return result;
+        }
+        else {
+            return "No Entrys Found";
+        }
+    };
     MxAOutputObjectList.prototype.toJSONFileString = function () {
         var result = "";
         var objectcounter = 0;
@@ -115,7 +134,7 @@ var MxAOutputObjectList = /** @class */ (function () {
             fs.outputFile(target, this.toXMLFileString());
         }
         else if (resultType == this.HTMLTABLE) {
-            fs.outputFile(target, "ReturnFormat HTML not implemented yet");
+            fs.outputFile(target, this.toHTMLFileString());
         }
         else if (resultType == this.JSON) {
             //fs.outputFile(target, "ReturnFormat JSON not implemented yet");
@@ -169,9 +188,24 @@ var MxAOutputObject = /** @class */ (function () {
         });
         return xml;
     };
+    MxAOutputObject.prototype.toHTMLString = function () {
+        var result = "";
+        this.propertys.forEach(function (prop) {
+            result += "<td>" + prop.toString() + "</td>";
+        });
+        result += "\n";
+        return result;
+    };
+    MxAOutputObject.prototype.toHTMLHeader = function () {
+        var result = "";
+        this.propertys.forEach(function (prop) {
+            result += "<th>" + prop.getName() + "</th>";
+        });
+        result += "\n";
+        return result;
+    };
     MxAOutputObject.prototype.toJSONString = function () {
         var result = "";
-        result;
         for (var i = 0; i < this.propertys.length; i++) {
             if (i < this.propertys.length - 1) {
                 result += "\"" + this.propertys[i].getName() + "\": \"" + this.propertys[i].toString() + "\",";

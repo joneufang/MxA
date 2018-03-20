@@ -100,6 +100,27 @@ export class MxAOutputObjectList
         }
     }
 
+    protected toHTMLFileString() {
+        var result : string = "";
+        if(this.objects.length > 0) {
+            result += "<table style=\"width:100%\">\n";
+            result += "<tr>\n";
+            result += this.objects[0].toHTMLHeader();
+            result += "</tr>\n";
+            this.objects.forEach((obj) => {
+                result += "<tr>\n";
+                result += obj.toHTMLString();
+                result += "</tr>\n";
+            });
+            result += "</table>";
+            return result;
+        }
+        else
+        {
+            return "No Entrys Found";
+        }
+    }
+
     protected toJSONFileString() {
         var result : string = "";
         var objectcounter : number = 0;
@@ -139,7 +160,7 @@ export class MxAOutputObjectList
             fs.outputFile(target, this.toXMLFileString());
         }
         else if(resultType == this.HTMLTABLE) {
-            fs.outputFile(target, "ReturnFormat HTML not implemented yet");
+            fs.outputFile(target, this.toHTMLFileString());
         }
         else if(resultType == this.JSON) {
             //fs.outputFile(target, "ReturnFormat JSON not implemented yet");
@@ -207,9 +228,26 @@ export class MxAOutputObject {
         return xml;
     }
 
+    public toHTMLString() {
+        let result : string = "";
+        this.propertys.forEach((prop) => {
+            result += "<td>" + prop.toString() + "</td>";
+        });
+        result += "\n";
+        return result;
+    }
+
+    public toHTMLHeader() {
+        let result : string = "";
+        this.propertys.forEach((prop) => {
+            result += "<th>" + prop.getName() + "</th>";
+        });
+        result += "\n";
+        return result;
+    }
+
     public toJSONString() {
         let result : string = "";
-        result 
         for(var i = 0; i < this.propertys.length; i++){
             if(i < this.propertys.length - 1)
             {
