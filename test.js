@@ -12,11 +12,11 @@ var QueryConstants_1 = require("./QueryConstants");
 var username = 'jochen.neufang@mansystems.de';
 var apikey = 'e6a890bf-6377-4395-8924-87bfe8da7330';
 var projectId = "01bfc705-81e4-4ffa-8bc9-0c43e7f2b5ba";
-var project = new MxA.MxAToTextFile(username, apikey, projectId, "./Test.txt");
+var project = new MxA.MxAProject(username, apikey, projectId);
 //let project = new mendixanalytics.MxAToXMLFile(username, apikey, projectId, "./Test.xml");
 //project.getDocumentsFromProject([qrycons.propertys.ALL], [], [], [1]); //All Propertys unfiltered
 //project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME, qrycons.propertys.TYPE, qrycons.propertys.CONTAINER], [], [], [qrycons.sorting.TYPE,qrycons.sorting.NAME]);  //unfiltered Result with sorting
-project.getDocumentsFromProject([QueryConstants_1.documents.ID, QueryConstants_1.documents.NAME, QueryConstants_1.documents.TYPE, QueryConstants_1.documents.CONTAINER], [new MxA.Filter(QueryConstants_1.documents.NAME, "Testapp")], [QueryConstants_1.documents.TYPE, QueryConstants_1.documents.NAME]); //filtered Result with sorting
+project.getProjectDocumentsAsTXT([QueryConstants_1.documents.ID, QueryConstants_1.documents.NAME, QueryConstants_1.documents.TYPE, QueryConstants_1.documents.CONTAINER], [new MxA.Filter(QueryConstants_1.documents.NAME, "Testapp")], [QueryConstants_1.documents.TYPE, QueryConstants_1.documents.NAME], "./Test.txt"); //filtered Result with sorting
 //project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME,qrycons.propertys.TYPE], [qrycons.filter.TYPE,qrycons.filter.NAME], ["Microflow","Testapp"], []); //filtered Result
 //project.getDocumentsFromProject([qrycons.documents.propertys.ID,qrycons.documents.propertys.NAME,qrycons.documents.propertys.TYPE], [qrycons.documents.filter.TYPE], ["No Result Entry"], [1]); //No Result
 //qrycons.propertys.ID,qrycons.propertys.NAME, qrycons.propertys.TYPE, qrycons.propertys.CONTAINER

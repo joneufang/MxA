@@ -1,14 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var mendixmodelsdk_1 = require("mendixmodelsdk");
 var mendixplatformsdk_1 = require("mendixplatformsdk");
@@ -33,7 +23,7 @@ var MxAProject = /** @class */ (function () {
     Parameter: qrysortcolumns : number[]    Array of Columnnumbers for sorting
     Parameter: qryresulttype : string       Constant which ResultType should be used
     */
-    MxAProject.prototype.getDocsFromProject = function (qrypropertys, filter, qrysortcolumns, qryresulttype) {
+    MxAProject.prototype.getProjectDocuments = function (qrypropertys, filter, qrysortcolumns, qryresulttype, filename) {
         var _this = this;
         var outputobjects = new MxAO.MxAOutputObjectList();
         this.project.createWorkingCopy().then(function (workingCopy) {
@@ -59,9 +49,18 @@ var MxAProject = /** @class */ (function () {
                 }
             });
             outputobjects = outputobjects.sort(qrysortcolumns); //Sort Objects
-            outputobjects.returnResult(qryresulttype, _this.target); //Return As Output Type
+            outputobjects.returnResult(qryresulttype, filename); //Return As Output Type
             console.log("Im Done!!!");
         });
+    };
+    MxAProject.prototype.getProjectDocumentsAsHTML = function (propertys, filter, sortcolumn, filename) {
+        this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.HTMLTABLE, filename);
+    };
+    MxAProject.prototype.getProjectDocumentsAsXML = function (propertys, filter, sortcolumn, filename) {
+        this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.XML, filename);
+    };
+    MxAProject.prototype.getProjectDocumentsAsTXT = function (propertys, filter, sortcolumn, filename) {
+        this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
     };
     MxAProject.prototype.loadAllDocumentsAsPromise = function (documents) {
         return when.all(documents.map(function (doc) { return mendixplatformsdk_1.loadAsPromise(doc); }));
@@ -73,48 +72,7 @@ var MxAProject = /** @class */ (function () {
     MxAProject.JSON = "JSON";
     return MxAProject;
 }());
-//Mendix Analytics Project with HTMLElement as ResultType
-var MxAToHtmlTable = /** @class */ (function (_super) {
-    __extends(MxAToHtmlTable, _super);
-    function MxAToHtmlTable(username, apikey, appid, htmlresultfield) {
-        var _this = _super.call(this, username, apikey, appid) || this;
-        _this.target = htmlresultfield;
-        return _this;
-    }
-    MxAToHtmlTable.prototype.getDocumentsFromProject = function (propertys, filter, sortcolumn) {
-        _super.prototype.getDocsFromProject.call(this, propertys, filter, sortcolumn, MxAProject.HTMLTABLE);
-    };
-    return MxAToHtmlTable;
-}(MxAProject));
-exports.MxAToHtmlTable = MxAToHtmlTable;
-//Mendix Analytics Project with TextFile as ResultType
-var MxAToTextFile = /** @class */ (function (_super) {
-    __extends(MxAToTextFile, _super);
-    function MxAToTextFile(username, apikey, appid, textfile) {
-        var _this = _super.call(this, username, apikey, appid) || this;
-        _this.target = textfile;
-        return _this;
-    }
-    MxAToTextFile.prototype.getDocumentsFromProject = function (propertys, filter, sortcolumn) {
-        _super.prototype.getDocsFromProject.call(this, propertys, filter, sortcolumn, MxAProject.TEXTFILE);
-    };
-    return MxAToTextFile;
-}(MxAProject));
-exports.MxAToTextFile = MxAToTextFile;
-//Mendix Analytics Project with XMLFile as ResultType
-var MxAToXMLFile = /** @class */ (function (_super) {
-    __extends(MxAToXMLFile, _super);
-    function MxAToXMLFile(username, apikey, appid, xmlfile) {
-        var _this = _super.call(this, username, apikey, appid) || this;
-        _this.target = xmlfile;
-        return _this;
-    }
-    MxAToXMLFile.prototype.getDocumentsFromProject = function (propertys, filter, sortcolumn) {
-        _super.prototype.getDocsFromProject.call(this, propertys, filter, sortcolumn, MxAProject.XML);
-    };
-    return MxAToXMLFile;
-}(MxAProject));
-exports.MxAToXMLFile = MxAToXMLFile;
+exports.MxAProject = MxAProject;
 var Filter = /** @class */ (function () {
     function Filter(filtertype, filtervalue) {
         this.filtertype = filtertype;

@@ -6,7 +6,7 @@ import * as MxAA from "./MxAObjectAdapter";
 import * as qrycons from "./QueryConstants";
 
 //Mendix Analytics Project without specified Output Type
-class MxAProject {
+export class MxAProject {
 
     //Constants to define output target
     protected static readonly TEXTFILE = "TEXTFILE";            
@@ -18,7 +18,7 @@ class MxAProject {
     protected key : string;         //API-Key for Mendix SDK
     protected id : string;          //AppID for Mendix SDK
 
-    protected target : string;        //Name of Ouptput target
+    
   
 
     protected client : MendixSdkClient;     //Mendix SDK client
@@ -26,7 +26,7 @@ class MxAProject {
 
     
     //Standard Constructor creates Mendix SDK Client and Project
-    protected constructor(username : string, apikey : string, appid: string) {
+    public constructor(username : string, apikey : string, appid: string) {
         this.name = username;
         this.key = apikey;
         this.id = appid;
@@ -43,7 +43,7 @@ class MxAProject {
     Parameter: qrysortcolumns : number[]    Array of Columnnumbers for sorting
     Parameter: qryresulttype : string       Constant which ResultType should be used
     */
-    protected getDocsFromProject(qrypropertys : string[], filter : Filter[], qrysortcolumns : string[], qryresulttype : string) {
+    protected getProjectDocuments(qrypropertys : string[], filter : Filter[], qrysortcolumns : string[], qryresulttype : string, filename: string) {
         var outputobjects : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
         
         this.project.createWorkingCopy().then((workingCopy) => {
@@ -71,9 +71,21 @@ class MxAProject {
                 }
             });
             outputobjects = outputobjects.sort(qrysortcolumns);         //Sort Objects
-            outputobjects.returnResult(qryresulttype,this.target);       //Return As Output Type
+            outputobjects.returnResult(qryresulttype,filename);       //Return As Output Type
             console.log("Im Done!!!");
         });
+    }
+
+    public getProjectDocumentsAsHTML(propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
+        this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.HTMLTABLE, filename);
+    }
+
+    public getProjectDocumentsAsXML(propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
+        this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.XML, filename);
+    }
+
+    public getProjectDocumentsAsTXT(propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
+        this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
     }
 
     protected loadAllDocumentsAsPromise(documents: projects.IDocument[]): when.Promise<projects.Document[]> {
@@ -81,48 +93,6 @@ class MxAProject {
     }
     
 }    
-
-//Mendix Analytics Project with HTMLElement as ResultType
-export class MxAToHtmlTable extends MxAProject {
-
-    public constructor(username : string, apikey : string, appid : string, htmlresultfield : string) {
-        super(username, apikey, appid);
-        this.target = htmlresultfield;
-    }
-
-    public getDocumentsFromProject(propertys : string[], filter : Filter[], sortcolumn : string[]) {
-        super.getDocsFromProject(propertys, filter, sortcolumn, MxAProject.HTMLTABLE);
-    }
-    
-}
-
-//Mendix Analytics Project with TextFile as ResultType
-export class MxAToTextFile extends MxAProject {
-
-    public constructor(username : string, apikey : string, appid : string, textfile : string) {
-        super(username, apikey, appid);
-        this.target = textfile;
-    }
-
-    public getDocumentsFromProject(propertys : string[], filter : Filter[], sortcolumn : string[]) {
-        super.getDocsFromProject(propertys, filter, sortcolumn, MxAProject.TEXTFILE);
-    }
-
-}
-
-//Mendix Analytics Project with XMLFile as ResultType
-export class MxAToXMLFile extends MxAProject {
-    
-    public constructor(username : string, apikey : string, appid : string, xmlfile : string) {
-        super(username, apikey, appid);
-        this.target = xmlfile;
-    }
-    
-    public getDocumentsFromProject(propertys : string[], filter : Filter[], sortcolumn : string[]) {
-        super.getDocsFromProject(propertys, filter, sortcolumn, MxAProject.XML);
-    }
-    
-}
 
 export class Filter {
     private filtertype : string;
