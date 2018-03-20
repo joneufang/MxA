@@ -62,6 +62,35 @@ var MxAProject = /** @class */ (function () {
     MxAProject.prototype.getProjectDocumentsAsTXT = function (propertys, filter, sortcolumn, filename) {
         this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
     };
+    MxAProject.prototype.getModuleDocuments = function (modulename, qrypropertys, filter, qrysortcolumns, qryresulttype, filename) {
+        var outputobjects = new MxAO.MxAOutputObjectList();
+        this.project.createWorkingCopy().then(function (workingCopy) {
+            return workingCopy.model().findModuleByQualifiedName(modulename);
+        })
+            .done(function (module) {
+            module.documents.forEach(function (doc) {
+                if (doc instanceof mendixmodelsdk_1.projects.Document) {
+                    var documentadapter = new MxAA.MxADocumentAdapter();
+                    var propertys = new Array();
+                    var mxaobj;
+                    propertys = documentadapter.getPropertys(doc, qrypropertys);
+                    mxaobj = new MxAO.MxAOutputObject(propertys, "Document"); //Get filtered Documents
+                    if (documentadapter.filter(mxaobj, filter)) {
+                        outputobjects.addObject(mxaobj); //filter object
+                    }
+                }
+                else {
+                    console.log("Got Document which is not instance of projects.Document");
+                }
+            });
+            outputobjects = outputobjects.sort(qrysortcolumns); //Sort Objects
+            outputobjects.returnResult(qryresulttype, filename); //Return As Output Type
+            console.log("Im Done!!!");
+        });
+    };
+    MxAProject.prototype.getModuleDocumentsAsTXT = function (modulename, propertys, filter, sortcolumn, filename) {
+        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
+    };
     MxAProject.prototype.loadAllDocumentsAsPromise = function (documents) {
         return when.all(documents.map(function (doc) { return mendixplatformsdk_1.loadAsPromise(doc); }));
     };

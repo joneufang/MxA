@@ -88,9 +88,44 @@ export class MxAProject {
         this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
     }
 
+    protected getModuleDocuments(modulename : string, qrypropertys : string[], filter : Filter[], qrysortcolumns : string[], qryresulttype : string, filename: string) {
+        var outputobjects : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
+        this.project.createWorkingCopy().then((workingCopy) => {
+            return workingCopy.model().findModuleByQualifiedName(modulename);
+        })
+        .done((module) => {
+            module.documents.forEach((doc) => {
+                if(doc instanceof projects.Document){
+                    var documentadapter : MxAA.MxADocumentAdapter = new MxAA.MxADocumentAdapter();
+                    var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
+                    var mxaobj : MxAO.MxAOutputObject;
+                    propertys = documentadapter.getPropertys(doc, qrypropertys);
+                    mxaobj = new MxAO.MxAOutputObject(propertys,"Document");                   //Get filtered Documents
+                    if(documentadapter.filter(mxaobj,filter))
+                    {
+                        outputobjects.addObject(mxaobj);                        //filter object
+                    }
+                }
+                else
+                {
+                    console.log("Got Document which is not instance of projects.Document");
+                }
+            });
+            outputobjects = outputobjects.sort(qrysortcolumns);         //Sort Objects
+            outputobjects.returnResult(qryresulttype,filename);       //Return As Output Type
+            console.log("Im Done!!!");
+        })
+    }
+
+    public getModuleDocumentsAsTXT(modulename : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
+        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
+    }
+
     protected loadAllDocumentsAsPromise(documents: projects.IDocument[]): when.Promise<projects.Document[]> {
         return when.all<projects.Document[]>(documents.map( doc => loadAsPromise(doc)));
     }
+
+    
     
 }    
 
