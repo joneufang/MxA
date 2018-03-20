@@ -1,39 +1,40 @@
 import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwidgets, projects, documenttemplates, AbstractElement} from "mendixmodelsdk";
 import * as MxAO from "./MxAOutputObject";
 import * as qrycons from "./QueryConstants";
+import { Structure } from "mendixmodelsdk/dist/sdk/internal/structures";
 
 //Adapter to get propertys and filter Mendix Objects
-export class MxAObjectAdapter {
+export class MxAStructureAdapter {
 
     constructor() {
 
     }
 
     //Get Id of Mendix Object
-    protected getId(object : AbstractElement) : MxAO.MxAOutputObjectProperty {
+    protected getId(structure : Structure) : MxAO.MxAOutputObjectProperty {
         var property : MxAO.MxAOutputObjectProperty;
 
-        property = new MxAO.MxAOutputObjectProperty("ID",object.id);
+        property = new MxAO.MxAOutputObjectProperty("ID",structure.id);
 
         return property; 
     }
 
     //Get Type of Mendix Object
-    protected getType(object : AbstractElement) : MxAO.MxAOutputObjectProperty {
+    protected getType(structure : Structure) : MxAO.MxAOutputObjectProperty {
         var property : MxAO.MxAOutputObjectProperty;
 
-        property = new MxAO.MxAOutputObjectProperty("TYPE",object.structureTypeName);
+        property = new MxAO.MxAOutputObjectProperty("TYPE",structure.structureTypeName);
 
         return property; 
     }
 
     //Get Container of Mendix Object
-    protected getContainer(object : AbstractElement) : MxAO.MxAOutputObjectProperty {
+    protected getContainer(structure : Structure) : MxAO.MxAOutputObjectProperty {
         var property : MxAO.MxAOutputObjectProperty;
         var container = "Kein Container"
 
         try{
-            var fbase = object.container;
+            var fbase = structure.container;
             if(fbase instanceof projects.Folder)
             {
                 var folder : projects.Folder = fbase;
@@ -77,7 +78,7 @@ export class MxAObjectAdapter {
 
 
 //Adapter to get propertys of Mendix Documents
-export class MxADocumentAdapter extends MxAObjectAdapter {
+export class MxADocumentAdapter extends MxAStructureAdapter {
     
     constructor() {
         super();   
@@ -87,7 +88,7 @@ export class MxADocumentAdapter extends MxAObjectAdapter {
     //Returns Array of Output Object Properties
     public getPropertys(document : projects.Document, qrypropertys : string[]) : MxAO.MxAOutputObjectProperty[] {
         var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
-        if(qrypropertys[0] == qrycons.documents.propertys.ALL)
+        if(qrypropertys[0] == qrycons.documents.ALL)
         {
             propertys[propertys.length] = this.getId(document);
             propertys[propertys.length] = this.getName(document);
@@ -98,23 +99,23 @@ export class MxADocumentAdapter extends MxAObjectAdapter {
         else
         {
             qrypropertys.forEach((qryprop) => {
-                if(qryprop == qrycons.documents.propertys.ID)
+                if(qryprop == qrycons.documents.ID)
                 {
                     propertys[propertys.length] = this.getId(document);
                 }
-                else if(qryprop == qrycons.documents.propertys.NAME)
+                else if(qryprop == qrycons.documents.NAME)
                 {
                     propertys[propertys.length] = this.getName(document);
                 }
-                else if(qryprop == qrycons.documents.propertys.TYPE)
+                else if(qryprop == qrycons.documents.TYPE)
                 {
                     propertys[propertys.length] = this.getType(document);
                 }
-                else if(qryprop == qrycons.documents.propertys.CONTAINER)
+                else if(qryprop == qrycons.documents.CONTAINER)
                 {
                     propertys[propertys.length] = this.getContainer(document);
                 }
-                else if(qryprop == qrycons.documents.propertys.DOCUMENTATION)
+                else if(qryprop == qrycons.documents.DOCUMENTATION)
                 {
                     propertys[propertys.length] = this.getDocumentation(document);
                 }

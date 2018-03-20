@@ -14,27 +14,27 @@ var mendixmodelsdk_1 = require("mendixmodelsdk");
 var MxAO = require("./MxAOutputObject");
 var qrycons = require("./QueryConstants");
 //Adapter to get propertys and filter Mendix Objects
-var MxAObjectAdapter = /** @class */ (function () {
-    function MxAObjectAdapter() {
+var MxAStructureAdapter = /** @class */ (function () {
+    function MxAStructureAdapter() {
     }
     //Get Id of Mendix Object
-    MxAObjectAdapter.prototype.getId = function (object) {
+    MxAStructureAdapter.prototype.getId = function (structure) {
         var property;
-        property = new MxAO.MxAOutputObjectProperty("ID", object.id);
+        property = new MxAO.MxAOutputObjectProperty("ID", structure.id);
         return property;
     };
     //Get Type of Mendix Object
-    MxAObjectAdapter.prototype.getType = function (object) {
+    MxAStructureAdapter.prototype.getType = function (structure) {
         var property;
-        property = new MxAO.MxAOutputObjectProperty("TYPE", object.structureTypeName);
+        property = new MxAO.MxAOutputObjectProperty("TYPE", structure.structureTypeName);
         return property;
     };
     //Get Container of Mendix Object
-    MxAObjectAdapter.prototype.getContainer = function (object) {
+    MxAStructureAdapter.prototype.getContainer = function (structure) {
         var property;
         var container = "Kein Container";
         try {
-            var fbase = object.container;
+            var fbase = structure.container;
             if (fbase instanceof mendixmodelsdk_1.projects.Folder) {
                 var folder = fbase;
                 container = folder.name;
@@ -51,7 +51,7 @@ var MxAObjectAdapter = /** @class */ (function () {
     };
     //Filters Output Object
     //Returns true if Object passes all filters
-    MxAObjectAdapter.prototype.filter = function (mxaobject, qryfilterTypes, qryfilterValues) {
+    MxAStructureAdapter.prototype.filter = function (mxaobject, qryfilterTypes, qryfilterValues) {
         var filtered = true;
         var filtercount = 0;
         qryfilterTypes.forEach(function (qryfilter) {
@@ -64,9 +64,9 @@ var MxAObjectAdapter = /** @class */ (function () {
         });
         return filtered;
     };
-    return MxAObjectAdapter;
+    return MxAStructureAdapter;
 }());
-exports.MxAObjectAdapter = MxAObjectAdapter;
+exports.MxAStructureAdapter = MxAStructureAdapter;
 //Adapter to get propertys of Mendix Documents
 var MxADocumentAdapter = /** @class */ (function (_super) {
     __extends(MxADocumentAdapter, _super);
@@ -78,7 +78,7 @@ var MxADocumentAdapter = /** @class */ (function (_super) {
     MxADocumentAdapter.prototype.getPropertys = function (document, qrypropertys) {
         var _this = this;
         var propertys = new Array();
-        if (qrypropertys[0] == qrycons.documents.propertys.ALL) {
+        if (qrypropertys[0] == qrycons.documents.ALL) {
             propertys[propertys.length] = this.getId(document);
             propertys[propertys.length] = this.getName(document);
             propertys[propertys.length] = this.getType(document);
@@ -87,19 +87,19 @@ var MxADocumentAdapter = /** @class */ (function (_super) {
         }
         else {
             qrypropertys.forEach(function (qryprop) {
-                if (qryprop == qrycons.documents.propertys.ID) {
+                if (qryprop == qrycons.documents.ID) {
                     propertys[propertys.length] = _this.getId(document);
                 }
-                else if (qryprop == qrycons.documents.propertys.NAME) {
+                else if (qryprop == qrycons.documents.NAME) {
                     propertys[propertys.length] = _this.getName(document);
                 }
-                else if (qryprop == qrycons.documents.propertys.TYPE) {
+                else if (qryprop == qrycons.documents.TYPE) {
                     propertys[propertys.length] = _this.getType(document);
                 }
-                else if (qryprop == qrycons.documents.propertys.CONTAINER) {
+                else if (qryprop == qrycons.documents.CONTAINER) {
                     propertys[propertys.length] = _this.getContainer(document);
                 }
-                else if (qryprop == qrycons.documents.propertys.DOCUMENTATION) {
+                else if (qryprop == qrycons.documents.DOCUMENTATION) {
                     propertys[propertys.length] = _this.getDocumentation(document);
                 }
                 else {
@@ -133,5 +133,5 @@ var MxADocumentAdapter = /** @class */ (function (_super) {
         return property;
     };
     return MxADocumentAdapter;
-}(MxAObjectAdapter));
+}(MxAStructureAdapter));
 exports.MxADocumentAdapter = MxADocumentAdapter;

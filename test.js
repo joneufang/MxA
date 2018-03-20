@@ -16,7 +16,7 @@ var projectId = "01bfc705-81e4-4ffa-8bc9-0c43e7f2b5ba";
 var project = new mendixanalytics.MxAToXMLFile(username, apikey, projectId, "./Test.xml");
 //project.getDocumentsFromProject([qrycons.propertys.ALL], [], [], [1]); //All Propertys unfiltered
 //project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME, qrycons.propertys.TYPE, qrycons.propertys.CONTAINER], [], [], [qrycons.sorting.TYPE,qrycons.sorting.NAME]);  //unfiltered Result with sorting
-project.getDocumentsFromProject([QueryConstants_1.documents.propertys.ID, QueryConstants_1.documents.propertys.NAME, QueryConstants_1.documents.propertys.TYPE, QueryConstants_1.documents.propertys.CONTAINER], [QueryConstants_1.documents.filter.NAME], ["Testapp"], [QueryConstants_1.documents.sorting.TYPE, QueryConstants_1.documents.sorting.NAME]); //filtered Result with sorting
+project.getDocumentsFromProject([QueryConstants_1.documents.ID, QueryConstants_1.documents.NAME, QueryConstants_1.documents.TYPE, QueryConstants_1.documents.CONTAINER], [QueryConstants_1.documents.NAME], ["Testapp"], [QueryConstants_1.documents.TYPE, QueryConstants_1.documents.NAME]); //filtered Result with sorting
 //project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME,qrycons.propertys.TYPE], [qrycons.filter.TYPE,qrycons.filter.NAME], ["Microflow","Testapp"], []); //filtered Result
 //project.getDocumentsFromProject([qrycons.documents.propertys.ID,qrycons.documents.propertys.NAME,qrycons.documents.propertys.TYPE], [qrycons.documents.filter.TYPE], ["No Result Entry"], [1]); //No Result
 //qrycons.propertys.ID,qrycons.propertys.NAME, qrycons.propertys.TYPE, qrycons.propertys.CONTAINER
