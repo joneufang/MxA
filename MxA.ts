@@ -1,6 +1,7 @@
 import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwidgets, projects, documenttemplates} from "mendixmodelsdk";
 import {MendixSdkClient, Project, OnlineWorkingCopy, loadAsPromise} from "mendixplatformsdk";
 import when = require("when");
+import fs = require("fs-extra");
 import * as MxAO from "./MxAOutputObject";
 import * as MxAA from "./MxAObjectAdapter";
 import * as qrycons from "./QueryConstants";
@@ -93,8 +94,8 @@ export class MxAProject {
         this.project.createWorkingCopy().then((workingCopy) => {
             return workingCopy.model().findModuleByQualifiedName(modulename);
         })
-        .done((module) => {
-            module.documents.forEach((doc) => {
+        .done((modul) => {
+            modul.documents.forEach((doc) => {
                 if(doc instanceof projects.Document){
                     var documentadapter : MxAA.MxADocumentAdapter = new MxAA.MxADocumentAdapter();
                     var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
@@ -121,11 +122,61 @@ export class MxAProject {
         this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
     }
 
+    public getModuleDocumentsAsHTML(modulename : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
+        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.HTMLTABLE, filename);
+    }
+
+    public getModuleDocumentsAsXML(modulename : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
+        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.XML, filename);
+    }
+
+    protected getFolderDocuments(foldername : string, qrypropertys : string[], filter : Filter[], qrysortcolumns : string[], qryresulttype : string, filename: string) {
+        var outputobjects : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
+        var folderfound : boolean = false;
+        this.project.createWorkingCopy().then((workingCopy) => {
+            return workingCopy.model().allFolders();
+        })
+        .done((folders) => {
+            folders.forEach((folder) => {
+                if(folder.name == foldername)
+                {
+                    folderfound = true;
+                    folder.documents.forEach((doc) => {
+                        if(doc instanceof projects.Document){
+                            var documentadapter : MxAA.MxADocumentAdapter = new MxAA.MxADocumentAdapter();
+                            var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
+                            var mxaobj : MxAO.MxAOutputObject;
+                            propertys = documentadapter.getPropertys(doc, qrypropertys);
+                            mxaobj = new MxAO.MxAOutputObject(propertys,"Document");                   //Get filtered Documents
+                            if(documentadapter.filter(mxaobj,filter))
+                            {
+                                outputobjects.addObject(mxaobj);                        //filter object
+                            }
+                        }
+                        else
+                        {
+                            console.log("Got Document which is not instance of projects.Document");
+                        }
+                    });
+                    outputobjects = outputobjects.sort(qrysortcolumns);         //Sort Objects
+                    outputobjects.returnResult(qryresulttype,filename);       //Return As Output Type
+                    console.log("Im Done!!!");
+                }
+            })
+            if(!folderfound){
+                fs.outputFile(filename, "Ordner mit dem Namen " + foldername + " wurde nicht gefunden");
+            }
+        })
+    }
+
+    public getFolderDocumentsAsTXT(foldername : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
+        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
+    }
+
     protected loadAllDocumentsAsPromise(documents: projects.IDocument[]): when.Promise<projects.Document[]> {
         return when.all<projects.Document[]>(documents.map( doc => loadAsPromise(doc)));
     }
 
-    
     
 }    
 

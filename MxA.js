@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mendixmodelsdk_1 = require("mendixmodelsdk");
 var mendixplatformsdk_1 = require("mendixplatformsdk");
 var when = require("when");
+var fs = require("fs-extra");
 var MxAO = require("./MxAOutputObject");
 var MxAA = require("./MxAObjectAdapter");
 //Mendix Analytics Project without specified Output Type
@@ -67,8 +68,8 @@ var MxAProject = /** @class */ (function () {
         this.project.createWorkingCopy().then(function (workingCopy) {
             return workingCopy.model().findModuleByQualifiedName(modulename);
         })
-            .done(function (module) {
-            module.documents.forEach(function (doc) {
+            .done(function (modul) {
+            modul.documents.forEach(function (doc) {
                 if (doc instanceof mendixmodelsdk_1.projects.Document) {
                     var documentadapter = new MxAA.MxADocumentAdapter();
                     var propertys = new Array();
@@ -90,6 +91,50 @@ var MxAProject = /** @class */ (function () {
     };
     MxAProject.prototype.getModuleDocumentsAsTXT = function (modulename, propertys, filter, sortcolumn, filename) {
         this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
+    };
+    MxAProject.prototype.getModuleDocumentsAsHTML = function (modulename, propertys, filter, sortcolumn, filename) {
+        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.HTMLTABLE, filename);
+    };
+    MxAProject.prototype.getModuleDocumentsAsXML = function (modulename, propertys, filter, sortcolumn, filename) {
+        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.XML, filename);
+    };
+    MxAProject.prototype.getFolderDocuments = function (foldername, qrypropertys, filter, qrysortcolumns, qryresulttype, filename) {
+        var outputobjects = new MxAO.MxAOutputObjectList();
+        var folderfound = false;
+        this.project.createWorkingCopy().then(function (workingCopy) {
+            return workingCopy.model().allFolders();
+        })
+            .done(function (folders) {
+            folders.forEach(function (folder) {
+                if (folder.name == foldername) {
+                    folderfound = true;
+                    folder.documents.forEach(function (doc) {
+                        if (doc instanceof mendixmodelsdk_1.projects.Document) {
+                            var documentadapter = new MxAA.MxADocumentAdapter();
+                            var propertys = new Array();
+                            var mxaobj;
+                            propertys = documentadapter.getPropertys(doc, qrypropertys);
+                            mxaobj = new MxAO.MxAOutputObject(propertys, "Document"); //Get filtered Documents
+                            if (documentadapter.filter(mxaobj, filter)) {
+                                outputobjects.addObject(mxaobj); //filter object
+                            }
+                        }
+                        else {
+                            console.log("Got Document which is not instance of projects.Document");
+                        }
+                    });
+                    outputobjects = outputobjects.sort(qrysortcolumns); //Sort Objects
+                    outputobjects.returnResult(qryresulttype, filename); //Return As Output Type
+                    console.log("Im Done!!!");
+                }
+            });
+            if (!folderfound) {
+                fs.outputFile(filename, "Ordner mit dem Namen " + foldername + " wurde nicht gefunden");
+            }
+        });
+    };
+    MxAProject.prototype.getFolderDocumentsAsTXT = function (foldername, propertys, filter, sortcolumn, filename) {
+        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
     };
     MxAProject.prototype.loadAllDocumentsAsPromise = function (documents) {
         return when.all(documents.map(function (doc) { return mendixplatformsdk_1.loadAsPromise(doc); }));

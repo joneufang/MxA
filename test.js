@@ -19,7 +19,8 @@ var project = new MxA.MxAProject(username, apikey, projectId);
 //project.getProjectDocumentsAsTXT([qrycons.ID,qrycons.NAME, qrycons.TYPE, qrycons.CONTAINER],[new MxA.Filter(qrycons.NAME, "Testapp")], [qrycons.TYPE,qrycons.NAME],  "./Test.txt");  //filtered Result with sorting
 //project.getDocumentsFromProject([qrycons.propertys.ID,qrycons.propertys.NAME,qrycons.propertys.TYPE], [qrycons.filter.TYPE,qrycons.filter.NAME], ["Microflow","Testapp"], []); //filtered Result
 //project.getDocumentsFromProject([qrycons.documents.propertys.ID,qrycons.documents.propertys.NAME,qrycons.documents.propertys.TYPE], [qrycons.documents.filter.TYPE], ["No Result Entry"], [1]); //No Result
-project.getModuleDocumentsAsTXT("Testapp", [QueryConstants_1.documents.ID, QueryConstants_1.documents.NAME, QueryConstants_1.documents.TYPE, QueryConstants_1.documents.CONTAINER], [], [QueryConstants_1.documents.TYPE, QueryConstants_1.documents.NAME], "./Test.txt");
+//project.getModuleDocumentsAsTXT("Testapp",[qrycons.ID,qrycons.NAME, qrycons.TYPE, qrycons.CONTAINER],[], [qrycons.TYPE,qrycons.NAME],  "./Test.txt");
+project.getFolderDocumentsAsTXT("00 Common", [QueryConstants_1.documents.ID, QueryConstants_1.documents.NAME, QueryConstants_1.documents.TYPE, QueryConstants_1.documents.CONTAINER], [], [QueryConstants_1.documents.TYPE, QueryConstants_1.documents.NAME], "./Test.txt");
 //qrycons.propertys.ID,qrycons.propertys.NAME, qrycons.propertys.TYPE, qrycons.propertys.CONTAINER
 /* //REPLACE TEST
 var client = new MendixSdkClient(username, apikey);
