@@ -6,10 +6,10 @@
         "sourceMap": false
     },
     "files" : [
-        "QueryConstants.ts",
-        "MxAObjectAdapter.ts",
-        "MxAOutputObject.ts",
+        "MMDAQueryConstants.ts",
+        "MMDAObjectAdapter.ts",
+        "MMDAOutputObject.ts",
         "test.ts",
-        "MxA.ts"
+        "MendixMetaDataAPI.ts"
     ]
 }

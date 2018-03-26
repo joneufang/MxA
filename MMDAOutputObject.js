@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs-extra");
 var XMLWriter = require("xml-writer");
 //ClassContainer for a List of OutputObjects
-var MxAOutputObjectList = /** @class */ (function () {
-    function MxAOutputObjectList() {
+var OutputObjectList = /** @class */ (function () {
+    function OutputObjectList() {
         //Constants to define output target
         this.TEXTFILE = "TEXTFILE";
         this.HTMLTABLE = "HTMLTABLE";
@@ -14,11 +14,11 @@ var MxAOutputObjectList = /** @class */ (function () {
         this.objects = new Array();
     }
     //Add Object to Container
-    MxAOutputObjectList.prototype.addObject = function (object) {
+    OutputObjectList.prototype.addObject = function (object) {
         this.objects[this.objects.length] = object;
     };
     //Sorts all Objects in Container in column order given
-    MxAOutputObjectList.prototype.sort = function (sortcolumns) {
+    OutputObjectList.prototype.sort = function (sortcolumns) {
         //console.log("Sort got " + sortcolumns);
         var sortingscount = sortcolumns.length;
         for (var i = (sortingscount - 1); i >= 0; i--) {
@@ -28,7 +28,7 @@ var MxAOutputObjectList = /** @class */ (function () {
         //Sorting need to be implemented !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         return this;
     };
-    MxAOutputObjectList.prototype.sortColumn = function (column) {
+    OutputObjectList.prototype.sortColumn = function (column) {
         //console.log("Sort Columns got " + column);
         for (var i = 0; i < this.objects.length; i++) {
             //console.log(this.objects[i].getPropertyValue(column));
@@ -43,7 +43,7 @@ var MxAOutputObjectList = /** @class */ (function () {
         }
     };
     //Serialize Container Objects for a TextFile
-    MxAOutputObjectList.prototype.toTextFileString = function () {
+    OutputObjectList.prototype.toTextFileString = function () {
         var _this = this;
         if (this.objects.length > 0) {
             var result_1 = "";
@@ -63,7 +63,7 @@ var MxAOutputObjectList = /** @class */ (function () {
         }
     };
     //Serialize Container Objects for a XMLFile
-    MxAOutputObjectList.prototype.toXMLFileString = function () {
+    OutputObjectList.prototype.toXMLFileString = function () {
         var xml = new XMLWriter();
         if (this.objects.length > 0) {
             xml.startDocument();
@@ -81,7 +81,7 @@ var MxAOutputObjectList = /** @class */ (function () {
             return "No Entrys Found";
         }
     };
-    MxAOutputObjectList.prototype.toHTMLFileString = function () {
+    OutputObjectList.prototype.toHTMLFileString = function () {
         var result = "";
         if (this.objects.length > 0) {
             result += "<table style=\"width:100%\">\n";
@@ -100,7 +100,7 @@ var MxAOutputObjectList = /** @class */ (function () {
             return "No Entrys Found";
         }
     };
-    MxAOutputObjectList.prototype.toJSONFileString = function () {
+    OutputObjectList.prototype.toJSONFileString = function () {
         var result = "";
         var objectcounter = 0;
         if (this.objects.length > 0) {
@@ -126,7 +126,7 @@ var MxAOutputObjectList = /** @class */ (function () {
         }
     };
     //Gives out OutputObjectList
-    MxAOutputObjectList.prototype.returnResult = function (resultType, target) {
+    OutputObjectList.prototype.returnResult = function (resultType, target) {
         if (resultType == this.TEXTFILE) {
             fs.outputFile(target, this.toTextFileString());
         } //Add ResultTypes Here
@@ -144,22 +144,22 @@ var MxAOutputObjectList = /** @class */ (function () {
             console.log("Wrong ResultType");
         }
     };
-    return MxAOutputObjectList;
+    return OutputObjectList;
 }());
-exports.MxAOutputObjectList = MxAOutputObjectList;
+exports.OutputObjectList = OutputObjectList;
 //Container for a single MendixObject
-var MxAOutputObject = /** @class */ (function () {
-    function MxAOutputObject(propertys, type) {
+var OutputObject = /** @class */ (function () {
+    function OutputObject(propertys, type) {
         this.propertys = propertys;
         this.type = type;
     }
     //Add Property to Object
-    MxAOutputObject.prototype.addProperty = function (name, value) {
-        var prop = new MxAOutputObjectProperty(name, value);
+    OutputObject.prototype.addProperty = function (name, value) {
+        var prop = new OutputObjectProperty(name, value);
         this.propertys[this.propertys.length] = prop;
     };
     //Get Value of given property
-    MxAOutputObject.prototype.getPropertyValue = function (name) {
+    OutputObject.prototype.getPropertyValue = function (name) {
         var value = "Property not found";
         this.propertys.forEach(function (prop) {
             if (prop.getName() == name) {
@@ -168,11 +168,11 @@ var MxAOutputObject = /** @class */ (function () {
         });
         return value;
     };
-    MxAOutputObject.prototype.getType = function () {
+    OutputObject.prototype.getType = function () {
         return this.type;
     };
     //Serialize ObjectData
-    MxAOutputObject.prototype.toString = function () {
+    OutputObject.prototype.toString = function () {
         var result = "";
         this.propertys.forEach(function (prop) {
             result += prop.toString() + "\t";
@@ -180,7 +180,7 @@ var MxAOutputObject = /** @class */ (function () {
         return result;
     };
     //Serialzie ObjectData to XML
-    MxAOutputObject.prototype.toXMLString = function (xml) {
+    OutputObject.prototype.toXMLString = function (xml) {
         this.propertys.forEach(function (prop) {
             xml.startElement(prop.getName());
             xml.text(prop.toString());
@@ -188,7 +188,7 @@ var MxAOutputObject = /** @class */ (function () {
         });
         return xml;
     };
-    MxAOutputObject.prototype.toHTMLString = function () {
+    OutputObject.prototype.toHTMLString = function () {
         var result = "";
         this.propertys.forEach(function (prop) {
             result += "<td>" + prop.toString() + "</td>";
@@ -196,7 +196,7 @@ var MxAOutputObject = /** @class */ (function () {
         result += "\n";
         return result;
     };
-    MxAOutputObject.prototype.toHTMLHeader = function () {
+    OutputObject.prototype.toHTMLHeader = function () {
         var result = "";
         this.propertys.forEach(function (prop) {
             result += "<th>" + prop.getName() + "</th>";
@@ -204,7 +204,7 @@ var MxAOutputObject = /** @class */ (function () {
         result += "\n";
         return result;
     };
-    MxAOutputObject.prototype.toJSONString = function () {
+    OutputObject.prototype.toJSONString = function () {
         var result = "";
         for (var i = 0; i < this.propertys.length; i++) {
             if (i < this.propertys.length - 1) {
@@ -217,7 +217,7 @@ var MxAOutputObject = /** @class */ (function () {
         return result;
     };
     //Serialize ObjectData with Column length size for TextFile Output
-    MxAOutputObject.prototype.toStringNormalized = function (size) {
+    OutputObject.prototype.toStringNormalized = function (size) {
         var result = "";
         this.propertys.forEach(function (prop) {
             var delta = size - prop.toString().length;
@@ -230,7 +230,7 @@ var MxAOutputObject = /** @class */ (function () {
         return result;
     };
     //Serialize Object Property Names
-    MxAOutputObject.prototype.getHeader = function () {
+    OutputObject.prototype.getHeader = function () {
         var result = "";
         this.propertys.forEach(function (prop) {
             result += prop.getName() + "\t";
@@ -238,7 +238,7 @@ var MxAOutputObject = /** @class */ (function () {
         return result;
     };
     //Serialize Object Property Names with Column length size for TextFile Output
-    MxAOutputObject.prototype.getHeaderNormalized = function (size) {
+    OutputObject.prototype.getHeaderNormalized = function (size) {
         var result = "";
         this.propertys.forEach(function (prop) {
             var delta = size - prop.getName().length;
@@ -251,7 +251,7 @@ var MxAOutputObject = /** @class */ (function () {
         return result;
     };
     //gets Length of the longest property in the Object
-    MxAOutputObject.prototype.getLongestPropertySize = function () {
+    OutputObject.prototype.getLongestPropertySize = function () {
         var size = 0;
         this.propertys.forEach(function (prop) {
             if (prop.toString().length > size) {
@@ -260,23 +260,23 @@ var MxAOutputObject = /** @class */ (function () {
         });
         return size;
     };
-    return MxAOutputObject;
+    return OutputObject;
 }());
-exports.MxAOutputObject = MxAOutputObject;
+exports.OutputObject = OutputObject;
 //Container for a single MendixProperty
-var MxAOutputObjectProperty = /** @class */ (function () {
-    function MxAOutputObjectProperty(name, value) {
+var OutputObjectProperty = /** @class */ (function () {
+    function OutputObjectProperty(name, value) {
         this.name = name;
         this.value = value;
     }
     //getName of Property
-    MxAOutputObjectProperty.prototype.getName = function () {
+    OutputObjectProperty.prototype.getName = function () {
         return this.name;
     };
     //getValue of Property
-    MxAOutputObjectProperty.prototype.toString = function () {
+    OutputObjectProperty.prototype.toString = function () {
         return this.value;
     };
-    return MxAOutputObjectProperty;
+    return OutputObjectProperty;
 }());
-exports.MxAOutputObjectProperty = MxAOutputObjectProperty;
+exports.OutputObjectProperty = OutputObjectProperty;

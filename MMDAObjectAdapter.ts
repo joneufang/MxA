@@ -1,37 +1,37 @@
 import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwidgets, projects, documenttemplates, AbstractElement} from "mendixmodelsdk";
-import * as MxAO from "./MxAOutputObject";
-import * as MxA from "./MxA";
-import * as qrycons from "./QueryConstants";
+import * as MMDAO from "./MMDAOutputObject";
+import * as MMDA from "./MendixMetaDataAPI";
+import * as qrycons from "./MMDAQueryConstants";
 import { Structure } from "mendixmodelsdk/dist/sdk/internal/structures";
 
 //Adapter to get propertys and filter Mendix Objects
-export class MxAStructureAdapter {
+export class StructureAdapter {
 
     constructor() {
 
     }
 
     //Get Id of Mendix Object
-    protected getId(structure : Structure) : MxAO.MxAOutputObjectProperty {
-        var property : MxAO.MxAOutputObjectProperty;
+    protected getId(structure : Structure) : MMDAO.OutputObjectProperty {
+        var property : MMDAO.OutputObjectProperty;
 
-        property = new MxAO.MxAOutputObjectProperty("ID",structure.id);
+        property = new MMDAO.OutputObjectProperty("ID",structure.id);
 
         return property; 
     }
 
     //Get Type of Mendix Object
-    protected getType(structure : Structure) : MxAO.MxAOutputObjectProperty {
-        var property : MxAO.MxAOutputObjectProperty;
+    protected getType(structure : Structure) : MMDAO.OutputObjectProperty {
+        var property : MMDAO.OutputObjectProperty;
 
-        property = new MxAO.MxAOutputObjectProperty("TYPE",structure.structureTypeName);
+        property = new MMDAO.OutputObjectProperty("TYPE",structure.structureTypeName);
 
         return property; 
     }
 
     //Get Container of Mendix Object
-    protected getContainer(structure : Structure) : MxAO.MxAOutputObjectProperty {
-        var property : MxAO.MxAOutputObjectProperty;
+    protected getContainer(structure : Structure) : MMDAO.OutputObjectProperty {
+        var property : MMDAO.OutputObjectProperty;
         var container = "Kein Container"
 
         try{
@@ -51,14 +51,14 @@ export class MxAStructureAdapter {
         {
 
         }
-        property = new MxAO.MxAOutputObjectProperty("CONTAINER",container);
+        property = new MMDAO.OutputObjectProperty("CONTAINER",container);
 
         return property; 
     }
 
     //Filters Output Object
     //Returns true if Object passes all filters
-    public filter(mxaobject : MxAO.MxAOutputObject, filter : MxA.Filter[]) : boolean
+    public filter(MMDAobject : MMDAO.OutputObject, filter : MMDA.Filter[]) : boolean
     {
         var filtered : boolean = true;
         var filtercount : number = 0;
@@ -66,7 +66,7 @@ export class MxAStructureAdapter {
         filter.forEach((qryfilter) => {
             //onsole.log("FilterType: " + qryfilter.getType)
             var regex = qryfilter.getValue();
-            var value = mxaobject.getPropertyValue(qryfilter.getType()); 
+            var value = MMDAobject.getPropertyValue(qryfilter.getType()); 
             if(!(value.match(regex) || regex == value))
             {
                 filtered = false;
@@ -78,13 +78,13 @@ export class MxAStructureAdapter {
     }
 }
 
-export class MxAAbstractElementAdapter extends MxAStructureAdapter{
+export class AbstractElementAdapter extends StructureAdapter{
     constructor() {
         super();   
     }
 }
 
-export class MxAModuleDocumentAdapter extends MxAAbstractElementAdapter{
+export class ModuleDocumentAdapter extends AbstractElementAdapter{
     constructor() {
         super();   
     }
@@ -92,7 +92,7 @@ export class MxAModuleDocumentAdapter extends MxAAbstractElementAdapter{
 
 
 //Adapter to get propertys of Mendix Documents
-export class MxADocumentAdapter extends MxAModuleDocumentAdapter {
+export class DocumentAdapter extends ModuleDocumentAdapter {
     
     constructor() {
         super();   
@@ -100,8 +100,8 @@ export class MxADocumentAdapter extends MxAModuleDocumentAdapter {
 
     //Gets all wanted propertys from a Mendix Document
     //Returns Array of Output Object Properties
-    public getPropertys(document : projects.Document, qrypropertys : string[]) : MxAO.MxAOutputObjectProperty[] {
-        var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
+    public getDocumentPropertys(document : projects.Document, qrypropertys : string[]) : MMDAO.OutputObjectProperty[] {
+        var propertys : MMDAO.OutputObjectProperty[] = new Array();
         if(qrypropertys[0] == qrycons.documents.ALL)
         {
             propertys[propertys.length] = this.getId(document);
@@ -135,7 +135,7 @@ export class MxADocumentAdapter extends MxAModuleDocumentAdapter {
                 }
                 else
                 {
-                    propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Unknown Property","Value of Unknown Property");
+                    propertys[propertys.length] = new MMDAO.OutputObjectProperty("Unknown Property","Value of Unknown Property");
                 }
             })
         }
@@ -143,19 +143,19 @@ export class MxADocumentAdapter extends MxAModuleDocumentAdapter {
     }
 
     //gets Name of a Mendix Document
-    protected getName(document : projects.Document) : MxAO.MxAOutputObjectProperty {
-        var property : MxAO.MxAOutputObjectProperty;
+    protected getName(document : projects.Document) : MMDAO.OutputObjectProperty {
+        var property : MMDAO.OutputObjectProperty;
         
-        property = new MxAO.MxAOutputObjectProperty("NAME",document.qualifiedName);
+        property = new MMDAO.OutputObjectProperty("NAME",document.qualifiedName);
         
         return property;
     }
 
     //gets Documentation of a Mendix Document
-    protected getDocumentation(document : projects.Document) : MxAO.MxAOutputObjectProperty {
-        var property : MxAO.MxAOutputObjectProperty;
+    protected getDocumentation(document : projects.Document) : MMDAO.OutputObjectProperty {
+        var property : MMDAO.OutputObjectProperty;
 
-        property = new MxAO.MxAOutputObjectProperty("DOCUMENTATION","No Value loaded");    //Muss noch richtig implementiert werden aktuell überall No Value muss mit .load(callback) geladen werden.
+        property = new MMDAO.OutputObjectProperty("DOCUMENTATION","No Value loaded");    //Muss noch richtig implementiert werden aktuell überall No Value muss mit .load(callback) geladen werden.
         
         if(document.isLoaded) {
             var docu = document.documentation;
@@ -163,11 +163,11 @@ export class MxADocumentAdapter extends MxAModuleDocumentAdapter {
             docu = docu.replace(/\n/g, "\t");
             if(docu == "")
             {
-                property = new MxAO.MxAOutputObjectProperty("DOCUMENTATION","No Documentation");
+                property = new MMDAO.OutputObjectProperty("DOCUMENTATION","No Documentation");
             }
             else
             {
-                property = new MxAO.MxAOutputObjectProperty("DOCUMENTATION",docu);
+                property = new MMDAO.OutputObjectProperty("DOCUMENTATION",docu);
             }
         }
         

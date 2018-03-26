@@ -3,7 +3,7 @@ import XMLWriter = require('xml-writer');
 
 
 //ClassContainer for a List of OutputObjects
-export class MxAOutputObjectList
+export class OutputObjectList
 {
      //Constants to define output target
     protected readonly TEXTFILE = "TEXTFILE";            
@@ -11,7 +11,7 @@ export class MxAOutputObjectList
     protected readonly XML = "XML";
     protected readonly JSON = "JSON";
 
-    private objects : MxAOutputObject[];      //Array of Objects
+    private objects : OutputObject[];      //Array of Objects
     private propertylength : number = 20;       //Length of columns for TextFile Output
 
     constructor() {
@@ -19,12 +19,12 @@ export class MxAOutputObjectList
     }
 
     //Add Object to Container
-    public addObject(object : MxAOutputObject) {
+    public addObject(object : OutputObject) {
         this.objects[this.objects.length] = object;
     }
 
     //Sorts all Objects in Container in column order given
-    public sort(sortcolumns : string[]) : MxAOutputObjectList
+    public sort(sortcolumns : string[]) : OutputObjectList
     {
         //console.log("Sort got " + sortcolumns);
         var sortingscount = sortcolumns.length;
@@ -176,18 +176,18 @@ export class MxAOutputObjectList
 }
 
 //Container for a single MendixObject
-export class MxAOutputObject {
-    private propertys : MxAOutputObjectProperty[];   //Array of Propertys
+export class OutputObject {
+    private propertys : OutputObjectProperty[];   //Array of Propertys
     private type : String;
 
-    constructor(propertys : MxAOutputObjectProperty[], type : String) {
+    constructor(propertys : OutputObjectProperty[], type : String) {
         this.propertys = propertys;
         this.type = type;
     }
 
     //Add Property to Object
     public addProperty(name : string, value : string) {
-        let prop = new MxAOutputObjectProperty(name, value);
+        let prop = new OutputObjectProperty(name, value);
         this.propertys[this.propertys.length] = prop
     }
 
@@ -314,7 +314,7 @@ export class MxAOutputObject {
 }
 
 //Container for a single MendixProperty
-export class MxAOutputObjectProperty {
+export class OutputObjectProperty {
     private name : string;      //Name of the Property
     private value : string;     //Value of the Property
 

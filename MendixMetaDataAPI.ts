@@ -2,12 +2,12 @@ import {ModelSdkClient, IModel, IModelUnit, domainmodels, utils, pages, customwi
 import {MendixSdkClient, Project, OnlineWorkingCopy, loadAsPromise} from "mendixplatformsdk";
 import when = require("when");
 import fs = require("fs-extra");
-import * as MxAO from "./MxAOutputObject";
-import * as MxAA from "./MxAObjectAdapter";
-import * as qrycons from "./QueryConstants";
+import * as MMDAO from "./MMDAOutputObject";
+import * as MMDAA from "./MMDAObjectAdapter";
+import * as qrycons from "./MMDAQueryConstants";
 
 //Mendix Analytics Project without specified Output Type
-export class MxAProject {
+export class MMDAProject {
 
     //Constants to define output target
     protected static readonly TEXTFILE = "TEXTFILE";            
@@ -45,7 +45,7 @@ export class MxAProject {
     Parameter: qryresulttype : string       Constant which ResultType should be used
     */
     protected getProjectDocuments(qrypropertys : string[], filter : Filter[], qrysortcolumns : string[], qryresulttype : string, filename: string) {
-        var outputobjects : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
+        var outputobjects : MMDAO.OutputObjectList = new MMDAO.OutputObjectList();
         
         this.project.createWorkingCopy().then((workingCopy) => {
             return workingCopy.model().allDocuments();
@@ -56,14 +56,14 @@ export class MxAProject {
         .done((loadeddocs) => {
             loadeddocs.forEach((doc) => {
                 if(doc instanceof projects.Document){
-                    var documentadapter : MxAA.MxADocumentAdapter = new MxAA.MxADocumentAdapter();
-                    var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
-                    var mxaobj : MxAO.MxAOutputObject;
-                    propertys = documentadapter.getPropertys(doc, qrypropertys);
-                    mxaobj = new MxAO.MxAOutputObject(propertys,"Document");                   //Get filtered Documents
-                    if(documentadapter.filter(mxaobj,filter))
+                    var documentadapter : MMDAA.DocumentAdapter = new MMDAA.DocumentAdapter();
+                    var propertys : MMDAO.OutputObjectProperty[] = new Array();
+                    var MMDAobj : MMDAO.OutputObject;
+                    propertys = documentadapter.getDocumentPropertys(doc, qrypropertys);
+                    MMDAobj = new MMDAO.OutputObject(propertys,"Document");                   //Get filtered Documents
+                    if(documentadapter.filter(MMDAobj,filter))
                     {
-                        outputobjects.addObject(mxaobj);                        //filter object
+                        outputobjects.addObject(MMDAobj);                        //filter object
                     }
                 }
                 else
@@ -78,37 +78,37 @@ export class MxAProject {
     }
 
     public getProjectDocumentsAsHTML(propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
-        this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.HTMLTABLE, filename);
+        this.getProjectDocuments(propertys, filter, sortcolumn, MMDAProject.HTMLTABLE, filename);
     }
 
     public getProjectDocumentsAsXML(propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
-        this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.XML, filename);
+        this.getProjectDocuments(propertys, filter, sortcolumn, MMDAProject.XML, filename);
     }
 
     public getProjectDocumentsAsTXT(propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
-        this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
+        this.getProjectDocuments(propertys, filter, sortcolumn, MMDAProject.TEXTFILE, filename);
     }
 
     public getProjectDocumentsAsJSON(propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
-        this.getProjectDocuments(propertys, filter, sortcolumn, MxAProject.JSON, filename);
+        this.getProjectDocuments(propertys, filter, sortcolumn, MMDAProject.JSON, filename);
     }
 
     protected getModuleDocuments(modulename : string, qrypropertys : string[], filter : Filter[], qrysortcolumns : string[], qryresulttype : string, filename: string) {
-        var outputobjects : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
+        var outputobjects : MMDAO.OutputObjectList = new MMDAO.OutputObjectList();
         this.project.createWorkingCopy().then((workingCopy) => {
             return workingCopy.model().findModuleByQualifiedName(modulename);
         })
         .done((modul) => {
             modul.documents.forEach((doc) => {
                 if(doc instanceof projects.Document){
-                    var documentadapter : MxAA.MxADocumentAdapter = new MxAA.MxADocumentAdapter();
-                    var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
-                    var mxaobj : MxAO.MxAOutputObject;
-                    propertys = documentadapter.getPropertys(doc, qrypropertys);
-                    mxaobj = new MxAO.MxAOutputObject(propertys,"Document");                   //Get filtered Documents
-                    if(documentadapter.filter(mxaobj,filter))
+                    var documentadapter : MMDAA.DocumentAdapter = new MMDAA.DocumentAdapter();
+                    var propertys : MMDAO.OutputObjectProperty[] = new Array();
+                    var MMDAobj : MMDAO.OutputObject;
+                    propertys = documentadapter.getDocumentPropertys(doc, qrypropertys);
+                    MMDAobj = new MMDAO.OutputObject(propertys,"Document");                   //Get filtered Documents
+                    if(documentadapter.filter(MMDAobj,filter))
                     {
-                        outputobjects.addObject(mxaobj);                        //filter object
+                        outputobjects.addObject(MMDAobj);                        //filter object
                     }
                 }
                 else
@@ -123,23 +123,23 @@ export class MxAProject {
     }
 
     public getModuleDocumentsAsTXT(modulename : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
-        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
+        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MMDAProject.TEXTFILE, filename);
     }
 
     public getModuleDocumentsAsHTML(modulename : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
-        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.HTMLTABLE, filename);
+        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MMDAProject.HTMLTABLE, filename);
     }
 
     public getModuleDocumentsAsXML(modulename : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
-        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.XML, filename);
+        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MMDAProject.XML, filename);
     }
 
     public getModuleDocumentsAsJSON(modulename : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
-        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MxAProject.JSON, filename);
+        this.getModuleDocuments(modulename, propertys, filter, sortcolumn, MMDAProject.JSON, filename);
     }
 
     protected getFolderDocuments(foldername : string, qrypropertys : string[], filter : Filter[], qrysortcolumns : string[], qryresulttype : string, filename: string) {
-        var outputobjects : MxAO.MxAOutputObjectList = new MxAO.MxAOutputObjectList();
+        var outputobjects : MMDAO.OutputObjectList = new MMDAO.OutputObjectList();
         var folderfound : boolean = false;
         this.project.createWorkingCopy().then((workingCopy) => {
             return workingCopy.model().allFolders();
@@ -151,14 +151,14 @@ export class MxAProject {
                     folderfound = true;
                     folder.documents.forEach((doc) => {
                         if(doc instanceof projects.Document){
-                            var documentadapter : MxAA.MxADocumentAdapter = new MxAA.MxADocumentAdapter();
-                            var propertys : MxAO.MxAOutputObjectProperty[] = new Array();
-                            var mxaobj : MxAO.MxAOutputObject;
-                            propertys = documentadapter.getPropertys(doc, qrypropertys);
-                            mxaobj = new MxAO.MxAOutputObject(propertys,"Document");                   //Get filtered Documents
-                            if(documentadapter.filter(mxaobj,filter))
+                            var documentadapter : MMDAA.DocumentAdapter = new MMDAA.DocumentAdapter();
+                            var propertys : MMDAO.OutputObjectProperty[] = new Array();
+                            var MMDAobj : MMDAO.OutputObject;
+                            propertys = documentadapter.getDocumentPropertys(doc, qrypropertys);
+                            MMDAobj = new MMDAO.OutputObject(propertys,"Document");                   //Get filtered Documents
+                            if(documentadapter.filter(MMDAobj,filter))
                             {
-                                outputobjects.addObject(mxaobj);                        //filter object
+                                outputobjects.addObject(MMDAobj);                        //filter object
                             }
                         }
                         else
@@ -178,19 +178,19 @@ export class MxAProject {
     }
 
     public getFolderDocumentsAsHTML(foldername : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
-        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.HTMLTABLE, filename);
+        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MMDAProject.HTMLTABLE, filename);
     }
 
     public getFolderDocumentsAsTXT(foldername : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
-        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.TEXTFILE, filename);
+        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MMDAProject.TEXTFILE, filename);
     }
 
     public getFolderDocumentsAsXML(foldername : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
-        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.XML, filename);
+        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MMDAProject.XML, filename);
     }
 
     public getFolderDocumentsAsJSON(foldername : string, propertys : string[], filter : Filter[], sortcolumn : string[], filename : string) {
-        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MxAProject.JSON, filename);
+        this.getFolderDocuments(foldername, propertys, filter, sortcolumn, MMDAProject.JSON, filename);
     }
 
     protected loadAllDocumentsAsPromise(documents: projects.IDocument[]): when.Promise<projects.Document[]> {

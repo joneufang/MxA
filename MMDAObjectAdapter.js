@@ -11,26 +11,26 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var mendixmodelsdk_1 = require("mendixmodelsdk");
-var MxAO = require("./MxAOutputObject");
-var qrycons = require("./QueryConstants");
+var MMDAO = require("./MMDAOutputObject");
+var qrycons = require("./MMDAQueryConstants");
 //Adapter to get propertys and filter Mendix Objects
-var MxAStructureAdapter = /** @class */ (function () {
-    function MxAStructureAdapter() {
+var StructureAdapter = /** @class */ (function () {
+    function StructureAdapter() {
     }
     //Get Id of Mendix Object
-    MxAStructureAdapter.prototype.getId = function (structure) {
+    StructureAdapter.prototype.getId = function (structure) {
         var property;
-        property = new MxAO.MxAOutputObjectProperty("ID", structure.id);
+        property = new MMDAO.OutputObjectProperty("ID", structure.id);
         return property;
     };
     //Get Type of Mendix Object
-    MxAStructureAdapter.prototype.getType = function (structure) {
+    StructureAdapter.prototype.getType = function (structure) {
         var property;
-        property = new MxAO.MxAOutputObjectProperty("TYPE", structure.structureTypeName);
+        property = new MMDAO.OutputObjectProperty("TYPE", structure.structureTypeName);
         return property;
     };
     //Get Container of Mendix Object
-    MxAStructureAdapter.prototype.getContainer = function (structure) {
+    StructureAdapter.prototype.getContainer = function (structure) {
         var property;
         var container = "Kein Container";
         try {
@@ -46,18 +46,18 @@ var MxAStructureAdapter = /** @class */ (function () {
         }
         catch (error) {
         }
-        property = new MxAO.MxAOutputObjectProperty("CONTAINER", container);
+        property = new MMDAO.OutputObjectProperty("CONTAINER", container);
         return property;
     };
     //Filters Output Object
     //Returns true if Object passes all filters
-    MxAStructureAdapter.prototype.filter = function (mxaobject, filter) {
+    StructureAdapter.prototype.filter = function (MMDAobject, filter) {
         var filtered = true;
         var filtercount = 0;
         filter.forEach(function (qryfilter) {
             //onsole.log("FilterType: " + qryfilter.getType)
             var regex = qryfilter.getValue();
-            var value = mxaobject.getPropertyValue(qryfilter.getType());
+            var value = MMDAobject.getPropertyValue(qryfilter.getType());
             if (!(value.match(regex) || regex == value)) {
                 filtered = false;
             }
@@ -65,34 +65,34 @@ var MxAStructureAdapter = /** @class */ (function () {
         });
         return filtered;
     };
-    return MxAStructureAdapter;
+    return StructureAdapter;
 }());
-exports.MxAStructureAdapter = MxAStructureAdapter;
-var MxAAbstractElementAdapter = /** @class */ (function (_super) {
-    __extends(MxAAbstractElementAdapter, _super);
-    function MxAAbstractElementAdapter() {
+exports.StructureAdapter = StructureAdapter;
+var AbstractElementAdapter = /** @class */ (function (_super) {
+    __extends(AbstractElementAdapter, _super);
+    function AbstractElementAdapter() {
         return _super.call(this) || this;
     }
-    return MxAAbstractElementAdapter;
-}(MxAStructureAdapter));
-exports.MxAAbstractElementAdapter = MxAAbstractElementAdapter;
-var MxAModuleDocumentAdapter = /** @class */ (function (_super) {
-    __extends(MxAModuleDocumentAdapter, _super);
-    function MxAModuleDocumentAdapter() {
+    return AbstractElementAdapter;
+}(StructureAdapter));
+exports.AbstractElementAdapter = AbstractElementAdapter;
+var ModuleDocumentAdapter = /** @class */ (function (_super) {
+    __extends(ModuleDocumentAdapter, _super);
+    function ModuleDocumentAdapter() {
         return _super.call(this) || this;
     }
-    return MxAModuleDocumentAdapter;
-}(MxAAbstractElementAdapter));
-exports.MxAModuleDocumentAdapter = MxAModuleDocumentAdapter;
+    return ModuleDocumentAdapter;
+}(AbstractElementAdapter));
+exports.ModuleDocumentAdapter = ModuleDocumentAdapter;
 //Adapter to get propertys of Mendix Documents
-var MxADocumentAdapter = /** @class */ (function (_super) {
-    __extends(MxADocumentAdapter, _super);
-    function MxADocumentAdapter() {
+var DocumentAdapter = /** @class */ (function (_super) {
+    __extends(DocumentAdapter, _super);
+    function DocumentAdapter() {
         return _super.call(this) || this;
     }
     //Gets all wanted propertys from a Mendix Document
     //Returns Array of Output Object Properties
-    MxADocumentAdapter.prototype.getPropertys = function (document, qrypropertys) {
+    DocumentAdapter.prototype.getDocumentPropertys = function (document, qrypropertys) {
         var _this = this;
         var propertys = new Array();
         if (qrypropertys[0] == qrycons.documents.ALL) {
@@ -120,35 +120,35 @@ var MxADocumentAdapter = /** @class */ (function (_super) {
                     propertys[propertys.length] = _this.getDocumentation(document);
                 }
                 else {
-                    propertys[propertys.length] = new MxAO.MxAOutputObjectProperty("Unknown Property", "Value of Unknown Property");
+                    propertys[propertys.length] = new MMDAO.OutputObjectProperty("Unknown Property", "Value of Unknown Property");
                 }
             });
         }
         return propertys;
     };
     //gets Name of a Mendix Document
-    MxADocumentAdapter.prototype.getName = function (document) {
+    DocumentAdapter.prototype.getName = function (document) {
         var property;
-        property = new MxAO.MxAOutputObjectProperty("NAME", document.qualifiedName);
+        property = new MMDAO.OutputObjectProperty("NAME", document.qualifiedName);
         return property;
     };
     //gets Documentation of a Mendix Document
-    MxADocumentAdapter.prototype.getDocumentation = function (document) {
+    DocumentAdapter.prototype.getDocumentation = function (document) {
         var property;
-        property = new MxAO.MxAOutputObjectProperty("DOCUMENTATION", "No Value loaded"); //Muss noch richtig implementiert werden aktuell überall No Value muss mit .load(callback) geladen werden.
+        property = new MMDAO.OutputObjectProperty("DOCUMENTATION", "No Value loaded"); //Muss noch richtig implementiert werden aktuell überall No Value muss mit .load(callback) geladen werden.
         if (document.isLoaded) {
             var docu = document.documentation;
             docu = docu.replace(/\r/g, "");
             docu = docu.replace(/\n/g, "\t");
             if (docu == "") {
-                property = new MxAO.MxAOutputObjectProperty("DOCUMENTATION", "No Documentation");
+                property = new MMDAO.OutputObjectProperty("DOCUMENTATION", "No Documentation");
             }
             else {
-                property = new MxAO.MxAOutputObjectProperty("DOCUMENTATION", docu);
+                property = new MMDAO.OutputObjectProperty("DOCUMENTATION", docu);
             }
         }
         return property;
     };
-    return MxADocumentAdapter;
-}(MxAModuleDocumentAdapter));
-exports.MxADocumentAdapter = MxADocumentAdapter;
+    return DocumentAdapter;
+}(ModuleDocumentAdapter));
+exports.DocumentAdapter = DocumentAdapter;
